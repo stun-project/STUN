@@ -1,28 +1,17 @@
 extern crate tokio;
+mod stunserver;
 
+use std::env;
 use std::error::Error;
-use std::sync::Arc;
-use tokio::net::TcpListener;
-use tokio::sync::Mutex;
+use stunserver::{parse_program_arguments, StunServerBuilder};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    let listener = TcpListener::bind("localhost:6969").await?;
-    let state = Arc::new(Mutex::new(String::new()));
+    let server_args = parse_program_arguments(env::args().collect());
 
-    loop {
-        let (stream, client_adress) = listener.accept().await?;
-        let state = Arc::clone(&state);
-        tokio::spawn(async move {
-            println!("Accepted connection from {}", &client_adress);
+    let server = StunServerBuilder::build(server_args.0, server_args.1).await?;
 
-            if let Err(e) = handle_ws_connection().await {
-                println!("an error occurred; error = {:?}", e);
-            }
-        });
-    }
-}
+    server.run().await?;
 
-async fn handle_ws_connection() -> Result<(), Box<dyn Error>> {
     Ok(())
 }

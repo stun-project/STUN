@@ -9,3 +9,4 @@ edition = "2018"
 [dependencies]
 tokio = { version = "1.3.0", features = ["full", "tracing", "net", "macros"] }
 byteorder = "1"
+async-trait = "0.1.48"
