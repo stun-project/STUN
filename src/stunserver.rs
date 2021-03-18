@@ -2,7 +2,7 @@ extern crate tokio;
 
 use async_trait::async_trait;
 use std::error::Error;
-use std::net::{IpAddr, Ipv4Addr, Ipv6Addr, SocketAddr};
+use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 use std::str::FromStr;
 use tokio::io::AsyncReadExt;
 use tokio::net::{TcpListener, TcpStream, UdpSocket};
@@ -13,7 +13,7 @@ pub trait StunServer {
 }
 
 struct TcpStunServer {
-    server_address: SocketAddr,
+    _server_address: SocketAddr,
     tcp_socket: TcpListener,
 }
 
@@ -41,7 +41,7 @@ impl StunServer for TcpStunServer {
 }
 
 struct UdpStunServer {
-    server_address: SocketAddr,
+    _server_address: SocketAddr,
     udp_socket: UdpSocket,
 }
 
@@ -56,7 +56,9 @@ impl StunServer for UdpStunServer {
                         Ok(message) => {
                             tokio::spawn(async move {
                                 println!("Accepted connection from {}, received {} bytes", &message.1, &message.0);
-                                println!("{}", String::from_utf8_lossy(&buffer[..]));
+                                if let Err(e) = handle_udp_connection(&buffer, message.0).await {
+                                    println!("an error occurred; error = {:?}", e);
+                                }
                             });
                         },
                         Err(e) => println!("{:?}", e),
@@ -68,7 +70,7 @@ impl StunServer for UdpStunServer {
 }
 
 struct MultiplexedStunServer {
-    server_address: SocketAddr,
+    _server_address: SocketAddr,
     udp_socket: UdpSocket,
     tcp_socket: TcpListener,
 }
@@ -84,7 +86,9 @@ impl StunServer for MultiplexedStunServer {
                         Ok(message) => {
                             tokio::spawn(async move {
                                 println!("Accepted connection from {}, received {} bytes", &message.1, &message.0);
-                                println!("{}", String::from_utf8_lossy(&buffer[..]));
+                                if let Err(e) = handle_udp_connection(&buffer, message.0).await {
+                                    println!("an error occurred; error = {:?}", e);
+                                }
                             });
                         },
                         Err(e) => println!("{:?}", e),
@@ -137,10 +141,10 @@ impl StunServerBuilder {
     async fn build_tcp_server(
         server_address: SocketAddr,
     ) -> Result<Box<dyn StunServer>, Box<dyn Error>> {
-        let tcp_listener = TcpListener::bind("192.168.1.112:3478").await?;
+        let tcp_listener = TcpListener::bind(server_address).await?;
 
         let tcp_server = TcpStunServer {
-            server_address: server_address,
+            _server_address: server_address,
             tcp_socket: tcp_listener,
         };
 
@@ -149,10 +153,10 @@ impl StunServerBuilder {
     async fn build_udp_server(
         server_address: SocketAddr,
     ) -> Result<Box<dyn StunServer>, Box<dyn Error>> {
-        let udp_socket = UdpSocket::bind("192.168.1.112:3478").await?;
+        let udp_socket = UdpSocket::bind(server_address).await?;
 
         let udp_server = UdpStunServer {
-            server_address: server_address,
+            _server_address: server_address,
             udp_socket: udp_socket,
         };
 
@@ -161,15 +165,14 @@ impl StunServerBuilder {
     async fn build_multiplexed_server(
         server_address: SocketAddr,
     ) -> Result<Box<dyn StunServer>, Box<dyn Error>> {
-        let udp_socket = UdpSocket::bind("192.168.1.112:3478").await?;
-        let tcp_listener = TcpListener::bind("192.168.1.112:3478").await?;
+        let udp_socket = UdpSocket::bind(server_address).await?;
+        let tcp_listener = TcpListener::bind(server_address).await?;
 
         let multiplexed_stun_server = MultiplexedStunServer {
-            server_address: server_address,
+            _server_address: server_address,
             tcp_socket: tcp_listener,
             udp_socket: udp_socket,
         };
-
         Ok(Box::new(multiplexed_stun_server))
     }
 }
@@ -179,6 +182,14 @@ async fn handle_tcp_connection(mut stream: TcpStream) -> Result<(), Box<dyn Erro
     stream.readable().await?;
     let length = stream.read(&mut buffer).await?;
     println!("{}", String::from_utf8_lossy(&buffer[..length]));
+    Ok(())
+}
+
+async fn handle_udp_connection(
+    buffer: &[u8; 1024],
+    message_len: usize,
+) -> Result<(), Box<dyn Error>> {
+    println!("{}", String::from_utf8_lossy(&buffer[..message_len]));
     Ok(())
 }
 
@@ -195,7 +206,7 @@ pub fn parse_program_arguments(input: Vec<String>) -> (SocketAddr, StunServerEnu
             let parsed_address = &input[1];
             let address = IpAddr::V4(Ipv4Addr::from_str(parsed_address).unwrap());
 
-            println!("Trying to bind address {}: 3478", &parsed_address);
+            println!("Trying to bind address {}:3478", &parsed_address);
             return (
                 SocketAddr::new(address, 3478),
                 StunServerEnum::MultiplexedStunServer,
@@ -205,7 +216,7 @@ pub fn parse_program_arguments(input: Vec<String>) -> (SocketAddr, StunServerEnu
             let parsed_address = &input[1];
             let address = IpAddr::V4(Ipv4Addr::from_str(parsed_address).unwrap());
 
-            let parsed_port = &input[1];
+            let parsed_port = &input[2];
             let port = parsed_port.parse::<u16>().unwrap();
 
             println!("Trying to bind address {}:{}", &parsed_address, &port);
@@ -213,6 +224,48 @@ pub fn parse_program_arguments(input: Vec<String>) -> (SocketAddr, StunServerEnu
                 SocketAddr::new(address, port),
                 StunServerEnum::MultiplexedStunServer,
             );
+        }
+        4 => {
+            let parsed_address = &input[1];
+            let address = IpAddr::V4(Ipv4Addr::from_str(parsed_address).unwrap());
+
+            let parsed_port = &input[2];
+            let port = parsed_port.parse::<u16>().unwrap();
+
+            let parsed_protocol = &input[3];
+
+            println!(
+                "Trying to bind address {}:{} with protocol: {} ",
+                &parsed_address, &port, &parsed_protocol
+            );
+
+            match parsed_protocol.as_str() {
+                "multiplex" => {
+                    return (
+                        SocketAddr::new(address, port),
+                        StunServerEnum::MultiplexedStunServer,
+                    );
+                }
+                "tcp" => {
+                    return (
+                        SocketAddr::new(address, port),
+                        StunServerEnum::TcpStunServer,
+                    );
+                }
+                "udp" => {
+                    return (
+                        SocketAddr::new(address, port),
+                        StunServerEnum::UdpStunServer,
+                    );
+                }
+                _ => {
+                    println!("{}, what da fuck even is this??", &parsed_protocol);
+                    return (
+                        SocketAddr::new(address, port),
+                        StunServerEnum::MultiplexedStunServer,
+                    );
+                }
+            }
         }
 
         _ => {
