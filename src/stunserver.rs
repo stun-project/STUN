@@ -56,7 +56,9 @@ impl StunServer for UdpStunServer {
                         Ok(message) => {
                             tokio::spawn(async move {
                                 println!("Accepted connection from {}, received {} bytes", &message.1, &message.0);
-                                println!("{}", String::from_utf8_lossy(&buffer[..]));
+                                if let Err(e) = handle_udp_connection(&buffer, message.0).await {
+                                    println!("an error occurred; error = {:?}", e);
+                                }
                             });
                         },
                         Err(e) => println!("{:?}", e),
@@ -84,7 +86,9 @@ impl StunServer for MultiplexedStunServer {
                         Ok(message) => {
                             tokio::spawn(async move {
                                 println!("Accepted connection from {}, received {} bytes", &message.1, &message.0);
-                                println!("{}", String::from_utf8_lossy(&buffer[..]));
+                                if let Err(e) = handle_udp_connection(&buffer, message.0).await {
+                                    println!("an error occurred; error = {:?}", e);
+                                }
                             });
                         },
                         Err(e) => println!("{:?}", e),
@@ -179,6 +183,14 @@ async fn handle_tcp_connection(mut stream: TcpStream) -> Result<(), Box<dyn Erro
     stream.readable().await?;
     let length = stream.read(&mut buffer).await?;
     println!("{}", String::from_utf8_lossy(&buffer[..length]));
+    Ok(())
+}
+
+async fn handle_udp_connection(
+    buffer: &[u8; 1024],
+    message_len: usize,
+) -> Result<(), Box<dyn Error>> {
+    println!("{}", String::from_utf8_lossy(&buffer[..message_len]));
     Ok(())
 }
 
