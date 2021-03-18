@@ -13,7 +13,7 @@ pub trait StunServer {
 }
 
 struct TcpStunServer {
-    server_address: SocketAddr,
+    _server_address: SocketAddr,
     tcp_socket: TcpListener,
 }
 
@@ -41,7 +41,7 @@ impl StunServer for TcpStunServer {
 }
 
 struct UdpStunServer {
-    server_address: SocketAddr,
+    _server_address: SocketAddr,
     udp_socket: UdpSocket,
 }
 
@@ -70,7 +70,7 @@ impl StunServer for UdpStunServer {
 }
 
 struct MultiplexedStunServer {
-    server_address: SocketAddr,
+    _server_address: SocketAddr,
     udp_socket: UdpSocket,
     tcp_socket: TcpListener,
 }
@@ -144,7 +144,7 @@ impl StunServerBuilder {
         let tcp_listener = TcpListener::bind(server_address).await?;
 
         let tcp_server = TcpStunServer {
-            server_address: server_address,
+            _server_address: server_address,
             tcp_socket: tcp_listener,
         };
 
@@ -156,7 +156,7 @@ impl StunServerBuilder {
         let udp_socket = UdpSocket::bind(server_address).await?;
 
         let udp_server = UdpStunServer {
-            server_address: server_address,
+            _server_address: server_address,
             udp_socket: udp_socket,
         };
 
@@ -169,7 +169,7 @@ impl StunServerBuilder {
         let tcp_listener = TcpListener::bind(server_address).await?;
 
         let multiplexed_stun_server = MultiplexedStunServer {
-            server_address: server_address,
+            _server_address: server_address,
             tcp_socket: tcp_listener,
             udp_socket: udp_socket,
         };
