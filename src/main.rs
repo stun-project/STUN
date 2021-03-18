@@ -8,11 +8,9 @@ use tokio::net::{TcpListener, TcpStream, UdpSocket};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    let tcp_listener = TcpListener::bind("localhost:3478").await?;
+    let tcp_listener = TcpListener::bind("192.168.1.112:3478").await?;
 
-    let udp_listener = UdpSocket::bind("localhost:3478").await?;
-
-    //let state = Arc::new(Mutex::new(String::new()));
+    let udp_listener = UdpSocket::bind("192.168.1.112:3478").await?;
 
     loop {
         let mut buffer = [0 as u8; 1024];
@@ -23,7 +21,6 @@ async fn main() -> Result<(), Box<dyn Error>> {
                         tokio::spawn(async move {
                             println!("Accepted connection from {}, received {} bytes", &message.1, &message.0);
                             println!("{}", String::from_utf8_lossy(&buffer[..]));
-
                         });
                     },
                     Err(e) => println!("{:?}", e),
