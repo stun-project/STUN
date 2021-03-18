@@ -2,7 +2,7 @@ extern crate tokio;
 
 use async_trait::async_trait;
 use std::error::Error;
-use std::net::{IpAddr, Ipv4Addr, Ipv6Addr, SocketAddr};
+use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 use std::str::FromStr;
 use tokio::io::AsyncReadExt;
 use tokio::net::{TcpListener, TcpStream, UdpSocket};
@@ -141,7 +141,7 @@ impl StunServerBuilder {
     async fn build_tcp_server(
         server_address: SocketAddr,
     ) -> Result<Box<dyn StunServer>, Box<dyn Error>> {
-        let tcp_listener = TcpListener::bind("192.168.1.112:3478").await?;
+        let tcp_listener = TcpListener::bind(server_address).await?;
 
         let tcp_server = TcpStunServer {
             server_address: server_address,
@@ -153,7 +153,7 @@ impl StunServerBuilder {
     async fn build_udp_server(
         server_address: SocketAddr,
     ) -> Result<Box<dyn StunServer>, Box<dyn Error>> {
-        let udp_socket = UdpSocket::bind("192.168.1.112:3478").await?;
+        let udp_socket = UdpSocket::bind(server_address).await?;
 
         let udp_server = UdpStunServer {
             server_address: server_address,
@@ -165,15 +165,14 @@ impl StunServerBuilder {
     async fn build_multiplexed_server(
         server_address: SocketAddr,
     ) -> Result<Box<dyn StunServer>, Box<dyn Error>> {
-        let udp_socket = UdpSocket::bind("192.168.1.112:3478").await?;
-        let tcp_listener = TcpListener::bind("192.168.1.112:3478").await?;
+        let udp_socket = UdpSocket::bind(server_address).await?;
+        let tcp_listener = TcpListener::bind(server_address).await?;
 
         let multiplexed_stun_server = MultiplexedStunServer {
             server_address: server_address,
             tcp_socket: tcp_listener,
             udp_socket: udp_socket,
         };
-
         Ok(Box::new(multiplexed_stun_server))
     }
 }
@@ -207,7 +206,7 @@ pub fn parse_program_arguments(input: Vec<String>) -> (SocketAddr, StunServerEnu
             let parsed_address = &input[1];
             let address = IpAddr::V4(Ipv4Addr::from_str(parsed_address).unwrap());
 
-            println!("Trying to bind address {}: 3478", &parsed_address);
+            println!("Trying to bind address {}:3478", &parsed_address);
             return (
                 SocketAddr::new(address, 3478),
                 StunServerEnum::MultiplexedStunServer,
@@ -217,7 +216,7 @@ pub fn parse_program_arguments(input: Vec<String>) -> (SocketAddr, StunServerEnu
             let parsed_address = &input[1];
             let address = IpAddr::V4(Ipv4Addr::from_str(parsed_address).unwrap());
 
-            let parsed_port = &input[1];
+            let parsed_port = &input[2];
             let port = parsed_port.parse::<u16>().unwrap();
 
             println!("Trying to bind address {}:{}", &parsed_address, &port);
@@ -225,6 +224,48 @@ pub fn parse_program_arguments(input: Vec<String>) -> (SocketAddr, StunServerEnu
                 SocketAddr::new(address, port),
                 StunServerEnum::MultiplexedStunServer,
             );
+        }
+        4 => {
+            let parsed_address = &input[1];
+            let address = IpAddr::V4(Ipv4Addr::from_str(parsed_address).unwrap());
+
+            let parsed_port = &input[2];
+            let port = parsed_port.parse::<u16>().unwrap();
+
+            let parsed_protocol = &input[3];
+
+            println!(
+                "Trying to bind address {}:{} with protocol: {} ",
+                &parsed_address, &port, &parsed_protocol
+            );
+
+            match parsed_protocol.as_str() {
+                "multiplex" => {
+                    return (
+                        SocketAddr::new(address, port),
+                        StunServerEnum::MultiplexedStunServer,
+                    );
+                }
+                "tcp" => {
+                    return (
+                        SocketAddr::new(address, port),
+                        StunServerEnum::TcpStunServer,
+                    );
+                }
+                "udp" => {
+                    return (
+                        SocketAddr::new(address, port),
+                        StunServerEnum::UdpStunServer,
+                    );
+                }
+                _ => {
+                    println!("{}, what da fuck even is this??", &parsed_protocol);
+                    return (
+                        SocketAddr::new(address, port),
+                        StunServerEnum::MultiplexedStunServer,
+                    );
+                }
+            }
         }
 
         _ => {
