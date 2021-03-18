@@ -82,21 +82,7 @@ impl StunHeader {
     }
 }
 
-pub struct Attribute {
-    type_: u16;
-    length: u16;
-    value: u128;
-}
 
-impl Attribute {
-    pub fn serialize(&self) {
-        let mut vec = Vec::new();
-        vec.write_u8::<BigEndian>(self.type_);
-        vec.write_u8::<BigEndian>(self.length);
-        vec.write_u8::<BigEndian>(self.value); //denne kan legge til ekstra nuller (0), se struct
-        return vec;
-    }
-}
 
 pub struct StunBody {
     attributes: Vec<Attribute>

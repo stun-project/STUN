@@ -32,8 +32,8 @@ pub fn handle_message(stunMessage: &[u8]){
             stunPayload:StunBody{
                 attributes:vec![Attribute{
                     type_:ERROR_CODE,
-                    length:64,
-                    value: 0x0009
+                    length://length,
+                    value: //value
                 }];
             }
         }
@@ -42,7 +42,7 @@ pub fn handle_message(stunMessage: &[u8]){
     return StunMessage{
         stunHeader:StunHeader::new(BINDING_RESPONSE,length_body/*hmm*/,MAGIC_COOKIE,BigEndian::read_u128(&stunHeader[8..19])),
         stunPayload:StunBody{
-
+            
         }
     }
 
