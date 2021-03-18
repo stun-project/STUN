@@ -6,26 +6,26 @@
 - [ ] Server Error
 
 struct BadRequest{
-    pub const errorcode: u16 = 400;
+    pub const ERROR_CODE: u16 = 400;
 }
 
 struct Unauthorized{
-    pub const errorcode: u16 = 401;
+    pub const ERROR_CODE: u16 = 401;
 }
 
 struct StaleNonce{
-    pub const errorcode: u16 = 438;
+    pub const ERROR_CODE: u16 = 438;
 }
 
 struct TryAlternate {
-    pub const errorcode: u16 = 300;
+    pub const ERROR_CODE: u16 = 300;
 }
 
 struct UnknownAttribute {
-    pub const errorcode: u16 = 420;
+    pub const ERROR_CODE: u16 = 420;
 }
 
 struct ServerError {
-    oub const errorcode: u16 = 500;
+    pub const ERROR_CODE: u16 = 500;
 }
 
