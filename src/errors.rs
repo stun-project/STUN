@@ -26,6 +26,10 @@ struct UnknownAttribute {
 }
 
 struct ServerError {
-    oub const errorcode: u16 = 500;
+    pub const errorcode: u16 = 500;
+}
+
+struct Error{
+    pub statuscode: u16;
 }
 
