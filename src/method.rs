@@ -1,114 +1,67 @@
-use byteorder::{ByteOrder, BigEndian};
+use crate::attributes::*;
+use byteorder::{BigEndian, ByteOrder};
 
-pub const BINDING_REQUEST: u16 = 0x0001;
-pub const BINDING_RESPONSE: u16 = 0x0101;
-pub const BINDING_ERROR_RESPONSE: u16 = 0x0111;
-pub const BINDING_INDICATION: u16 = 0x0011;
 pub const MAGIC_COOKIE: u32 = 0x2112_A442;
 
-#[derive(Debug)]
-pub struct BindingRequest {
-    type_: u16;
-    length: u16;
-    magic_cookie: u32;
-    transaction_id: u128;
-}
-
-impl BindingRequest{
-    pub fn new(length:u16,transaction_id:u128) -> Self {
-        BindingRequest{
-            type_: BINDING_REQUEST,
-            length: length,
-            magic_cookie: MAGIC_COOKIE,
-            transaction_id: transaction_id
-        }
-    }
-}
-
-pub struct BindingResponse {
-    type_: u16 = BINDING_RESPONSE;
-    length: u16;
-    const MAGIC_COOKIE: u32 = 0x2112_A442; 
-    transactionId: u128;
-}
-
-pub struct BindingIndication {
-    type_: u16 = BINDING_INDICATION;
-    length: u16;
-    const MAGIC_COOKIE: u32 = 0x2112_A442; 
-    transactionId: u128;
-}
-
-pub struct BindingErrorResponse {
-    type_: u16 = BINDING_ERROR_RESPONSE;
-    length: u16;
-    const MAGIC_COOKIE: u32 = 0x2112_A442; 
-    transactionId: u128;
-}
-
-enum HeaderType {
-    REQUEST(BindingRequest),
-    RESPONSE(BindingResponse),
-    INDICATION(BindingIndication),
-    ERROR_RESPONSE(BindingErrorResponse)
-};
-
-
 pub struct StunHeader {
-    type_: u16;
-    length: u16;
-    magic_cookie: u32;
-    transaction_id: u128;
+    type_: u16,
+    length: u16,
+    transaction_id: [u8; 12],
 }
 
 impl StunHeader {
-    pub fn serialize(&self) {
-        let mut vec = Vec::new();
-        vec.write_u8::<BigEndian>(self.type_);
-        vec.write_u8::<BigEndian>(self.length);
-        vec.write_u8::<BigEndian>(self.magic_cookie);
-        vec.write_u8::<BigEndian>(self.transaction_id); //denne kan legge til ekstra nuller (0), se struct
-        return vec;
+    pub fn serialize(&self) -> Vec<u8> {
+        let mut stun_header: Vec<u8> = Vec::new();
 
+        BigEndian::write_u16(&mut stun_header, self.type_);
+        BigEndian::write_u16(&mut stun_header, self.length);
+        BigEndian::write_u32(&mut stun_header, MAGIC_COOKIE);
+        stun_header.append(&mut self.transaction_id.to_vec());
+
+        return stun_header;
     }
 
-    pub fn new(type_:u16,length:u16,transaction_id:u128) -> self {
-        StunHeader{
+    pub fn new(type_: u16, length: u16, transaction_id: [u8; 12]) -> Self {
+        StunHeader {
             type_: type_,
             length: length,
-            magic_cookie: MAGIC_COOKIE,
-            transaction_id: transaction_id
+            transaction_id: transaction_id,
         }
     }
 }
 
-
-
 pub struct StunBody {
-    attributes: Vec<Attribute>
+    pub attributes: Vec<Box<dyn Attribute>>,
 }
 
 impl StunBody {
-    pub fn serialize(&self) {
-        let mut vec = Vec::new();
-        for attribute in attributes {
-            vec.append(attribute.serialize);
+    pub fn serialize(&self) -> &mut Vec<u8> {
+        let mut vec: Vec<u8> = Vec::new();
+        for attribute in &self.attributes {
+            attribute.serialize();
         }
-        return vec;
+        todo!();
+        //return vec;
     }
 }
 
-
-struct StunMessage {
-    stunHeader: StunHeader;
-    stunPayload: StunBody
+pub struct StunMessage {
+    pub stun_header: StunHeader,
+    pub stun_body: StunBody,
 }
 
 impl StunMessage {
-    pub fn serialize(&self) {
-        let mut vec = Vec::new();
-        vec.append(stunHeader.serialize());
-        vec.append(stunPayload.serialize());
+    pub fn serialize(&self) -> Vec<u8> {
+        let mut vec: Vec<u8> = Vec::new();
+        vec.append(&mut self.stun_header.serialize());
+        vec.append(&mut self.stun_body.serialize());
         return vec;
     }
 }
+
+// let mut vec = Vec::new();
+// vec.write_u8::<BigEndian>(self.type_);
+// vec.write_u8::<BigEndian>(self.length);
+// vec.write_u8::<BigEndian>(self.magic_cookie);
+// vec.write_u8::<BigEndian>(self.transaction_id); //denne kan legge til ekstra nuller (0), se struct
+// return vec;
