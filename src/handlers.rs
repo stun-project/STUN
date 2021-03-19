@@ -1,4 +1,5 @@
-use crate::attributes::{Attribute, AttributeEnum, ErrorCode, ERROR_CODE};
+use crate::attributes::*;
+use std::net::{IpAddr, Ipv4Addr};
 use crate::errors::ErrorCodeEnum;
 use crate::method::{StunBody, StunHeader, StunMessage, MAGIC_COOKIE};
 use byteorder::{BigEndian, ByteOrder};
@@ -26,7 +27,7 @@ fn testHandlers() {
 
 const BODY_LENGTH: u16 = 6;
 
-pub fn handle_message(stun_message: &[u8]) -> StunMessage {
+pub fn handle_message(stun_message: &[u8],port: u16, address: IpAddr) -> StunMessage {
     let mut response: Vec<u8> = Vec::new();
     if !check_validity(&stun_message) {
         return StunMessage {
@@ -37,7 +38,7 @@ pub fn handle_message(stun_message: &[u8]) -> StunMessage {
             ),
             stun_body: StunBody {
                 attributes: vec![Box::new(AttributeEnum::ERROR_CODE({
-                    ErrorCode::new(ErrorCodeEnum::BadRequest as u32, "Yes".to_owned())
+                    ErrorCode::new(ErrorCodeEnum::BadRequest as u32, ErrorCodeEnum::reason_phrase(&ErrorCodeEnum::BadRequest).to_string())
                 }))],
             },
         };
@@ -49,9 +50,15 @@ pub fn handle_message(stun_message: &[u8]) -> StunMessage {
             stun_message[8..20].try_into().unwrap(),
         ),
         stun_body: StunBody {
-            attributes: vec![Box::new(AttributeEnum::ERROR_CODE({
-                ErrorCode::new(ErrorCodeEnum::BadRequest as u32, "Yes".to_owned())
-            }))],
+            attributes: vec![
+                Box::new(AttributeEnum::XOR_MAPPED_ADDRESS({
+                XorMappedAddress::new(0x01,port,address)
+            })),
+                Box::new(AttributeEnum::MAPPED_ADDRESS({
+                    MappedAddress::new(0x01,port,address)
+                }))
+            
+            ],
         },
     };
 }

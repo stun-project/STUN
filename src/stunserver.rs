@@ -56,7 +56,7 @@ impl StunServer for UdpStunServer {
                         Ok(message) => {
                             tokio::spawn(async move {
                                 println!("Accepted connection from {}, received {} bytes", &message.1, &message.0);
-                                if let Err(e) = handle_udp_connection(&buffer, message.0).await {
+                                if let Err(e) = handle_udp_connection(&buffer, message.0, message.1).await {
                                     println!("an error occurred; error = {:?}", e);
                                 }
                             });
@@ -86,7 +86,7 @@ impl StunServer for MultiplexedStunServer {
                         Ok(message) => {
                             tokio::spawn(async move {
                                 println!("Accepted connection from {}, received {} bytes", &message.1, &message.0);
-                                if let Err(e) = handle_udp_connection(&buffer, message.0).await {
+                                if let Err(e) = handle_udp_connection(&buffer, message.0, message.1).await {
                                     println!("an error occurred; error = {:?}", e);
                                 }
                             });
@@ -182,15 +182,21 @@ async fn handle_tcp_connection(mut stream: TcpStream) -> Result<(), Box<dyn Erro
     stream.readable().await?;
     let length = stream.read(&mut buffer).await?;
     println!("{}", String::from_utf8_lossy(&buffer[..length]));
+    let message = match stream.peer_addr(){
+        Ok(a) => handle_message(&buffer,a.port(),a.ip()),
+        Err(e) => panic!("how did you even get here"),
+    };
+    
     Ok(())
 }
 
 async fn handle_udp_connection(
     buffer: &[u8; 1024],
     message_len: usize,
+    address: SocketAddr
 ) -> Result<(), Box<dyn Error>> {
     println!("{:?}", &buffer[..message_len]);
-    let message = handle_message(&buffer[..message_len]);
+    let message = handle_message(&buffer[..message_len],address.port(),address.ip());
     Ok(())
 }
 

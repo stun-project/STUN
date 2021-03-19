@@ -7,7 +7,7 @@ pub enum ErrorCodeEnum {
     ServerError = 500,
 }
 impl ErrorCodeEnum {
-    fn reason_phrase(&self) -> &str {
+    pub fn reason_phrase(&self) -> &str {
         match *self {
             ErrorCodeEnum::BadRequest => BAD_REQUEST_REASON,
             ErrorCodeEnum::Unauthorized => UNAUTHORIZED_REASON,
@@ -18,6 +18,7 @@ impl ErrorCodeEnum {
         }
     }
 }
+
 
 const BAD_REQUEST_REASON: &str = "Bad Request: The request was malformed.  The client SHOULD NOT
         retry the request without modification from the previous

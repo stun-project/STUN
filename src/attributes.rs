@@ -1,5 +1,5 @@
 use std::net::{IpAddr, Ipv4Addr};
-
+use byteorder::{BigEndian, ByteOrder};
 pub const ERROR_CODE: u16 = 0x0009;
 pub const MAPPED_ADDRESS: u16 = 0x0001;
 pub const USERNAME: u16 = 0x0006;
@@ -20,7 +20,7 @@ pub enum AttributeEnum {
 }
 impl Attribute for AttributeEnum {
     fn serialize(&self) -> Vec<u8> {
-        todo!();
+        return Vec::new();
     }
 }
 
@@ -49,7 +49,14 @@ impl ErrorCode {
 }
 impl Attribute for ErrorCode {
     fn serialize(&self) -> Vec<u8> {
-        todo!();
+        let mut stun_attribute: Vec<u8> = Vec::new();
+
+        BigEndian::write_u16(&mut stun_attribute, self.type_);
+        BigEndian::write_u16(&mut stun_attribute, self.length);
+        BigEndian::write_u32(&mut stun_attribute, self.status_code);
+        stun_attribute.append(&mut self.reason_phrase.clone().into_bytes());
+
+        return stun_attribute
     }
 }
 
@@ -116,11 +123,11 @@ pub struct UnknownAttributes {
     type_: u16,
     length: u16,
     //Spesielt til error:
-    attributes: Vec<Box<dyn Attribute>>,
+    attributes: Vec<u16>,
 }
 
 impl UnknownAttributes {
-    pub fn new(vec: Vec<Box<dyn Attribute>>) -> Self {
+    pub fn new(vec: Vec<u16>) -> Self {
         UnknownAttributes {
             type_: UNKNOWN_ATTRIBUTES,
             length: (vec.len() * 2) as u16, //Funker ikke, addressen varierer fra 32-128 bits
@@ -128,5 +135,15 @@ impl UnknownAttributes {
         }
     }
 
-    pub fn serialize(&self) {}
+    pub fn serialize(&self)  -> Vec<u8> {
+        let mut stun_attribute: Vec<u8> = Vec::new();
+
+        BigEndian::write_u16(&mut stun_attribute, self.type_);
+        BigEndian::write_u16(&mut stun_attribute, self.length);
+        for &attribute in &self.attributes {
+            BigEndian::write_u16(&mut stun_attribute, attribute)
+        }
+
+        return stun_attribute
+    }
 }
