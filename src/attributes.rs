@@ -103,6 +103,56 @@ pub struct XorMappedAddress {
 }
 
 impl XorMappedAddress {
+    pub fn new(family:u8,port: u16, address:u128, transaction_id:u128) -> self{
+        let leng:u16;
+        if(family == 0x01) leng = 8; //er IPv4
+        else leng = 20;              //er IPv6
+
+        let xor_port:u16;
+        let mc:u16; // de 16 mest signifikante bitsene av magic cookien
+
+        // X-Port is computed by taking the mapped port in host byte order,
+        // XOR'ing it with the most significant 16 bits of the magic cookie, and
+        // then the converting the result to network byte order.
+        xor_port = port ^ mc; // funker selvfølgelig ikke
+
+        let mc32: u32 = 0x2112_A442;
+        let addr:u128 //er bare 32 for ipv4
+        //address
+        if(family == 0x01){
+        //  If the IP
+        //    address family is IPv4, X-Address is computed by taking the mapped IP
+        //    address in host byte order, XOR'ing it with the magic cookie, and
+        //    converting the result to network byte order. 
+            addr = address ^ mc32
+        }else{
+            // If the IP address
+            // family is IPv6, X-Address is computed by taking the mapped IP address
+            // in host byte order, XOR'ing it with the concatenation of the magic
+            // cookie and the 96-bit transaction ID, and converting the result to
+            // network byte order.
+            let xor_value:u128; //concaticating...
+            addr = address ^ xor_value;
+        }
+
+
+        return XorMappedAddress{
+            type_:XOR_MAPPED_ADDRESS,
+            length:leng,
+            family:family,
+            port:xor_port, // denne skal xores
+            address:addr // denne skal xores
+        }
+    }
+
+    pub fn serialize(&self) {
+        let mut vec = Vec::new();
+        //TODO
+        return vec;
+    }
+
+    pub fn 
+
     pub fn new(family: u8, port: u16, address: IpAddr) -> Self {
         XorMappedAddress {
             type_: XOR_MAPPED_ADDRESS,
