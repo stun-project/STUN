@@ -1,5 +1,5 @@
 extern crate tokio;
-use crate::handlers::{check_validity, handle_message};
+use crate::handlers::handle_message;
 use async_trait::async_trait;
 use std::error::Error;
 use std::net::{IpAddr, Ipv4Addr, SocketAddr};
@@ -182,21 +182,22 @@ async fn handle_tcp_connection(mut stream: TcpStream) -> Result<(), Box<dyn Erro
     stream.readable().await?;
     let length = stream.read(&mut buffer).await?;
     println!("{}", String::from_utf8_lossy(&buffer[..length]));
-    let message = match stream.peer_addr(){
-        Ok(a) => handle_message(&buffer,a.port(),a.ip()),
-        Err(e) => panic!("how did you even get here"),
+    match stream.peer_addr() {
+        Ok(a) => {
+            handle_message(&buffer, a.port(), a.ip());
+        }
+        Err(e) => panic!(e),
     };
-    
     Ok(())
 }
 
 async fn handle_udp_connection(
     buffer: &[u8; 1024],
     message_len: usize,
-    address: SocketAddr
+    address: SocketAddr,
 ) -> Result<(), Box<dyn Error>> {
     println!("{:?}", &buffer[..message_len]);
-    let message = handle_message(&buffer[..message_len],address.port(),address.ip()); //pase address, ta imot address
+    let _message = handle_message(&buffer[..message_len], address.port(), address.ip()); //pase address, ta imot address
     Ok(())
 }
 
@@ -281,5 +282,13 @@ pub fn parse_program_arguments(input: Vec<String>) -> (SocketAddr, StunServerEnu
                 StunServerEnum::MultiplexedStunServer,
             );
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn test() {
+        assert_eq!(1, 1);
     }
 }
