@@ -12,11 +12,20 @@ pub const SOFTWARE: u16 = 0x8022;
 pub const ALTERNATE_SERVER: u16 = 0x8023;
 pub const FINGERPRINT: u16 = 0x8028;
 
-pub enum Attribute {
+pub enum AttributeEnum {
     ERROR_CODE(ErrorCode),
-    MAPPED_ADDRESS,
-    XOR_MAPPED_ADDRESS,
-    UNKNOWN_ATTRIBUTES,
+    MAPPED_ADDRESS(MappedAddress),
+    XOR_MAPPED_ADDRESS(XorMappedAddress),
+    UNKNOWN_ATTRIBUTES(UnknownAttributes),
+}
+impl Attribute for AttributeEnum {
+    fn serialize(&self) -> Vec<u8> {
+        todo!();
+    }
+}
+
+pub trait Attribute {
+    fn serialize(&self) -> Vec<u8>;
 }
 
 pub struct ErrorCode {
@@ -37,16 +46,16 @@ impl ErrorCode {
             reason_phrase: reason_phrase,
         }
     }
-
-    pub fn serialize(&self) {
-        //let mut vec = Vec::new();
+}
+impl Attribute for ErrorCode {
+    fn serialize(&self) -> Vec<u8> {
         todo!();
     }
 }
 
 //-----
 
-struct MappedAddress {
+pub struct MappedAddress {
     //generell attribute:
     type_: u16,
     length: u16,
@@ -76,7 +85,7 @@ impl MappedAddress {
 
 //-----
 //TODO: alt med xor-mapped...
-struct XorMappedAddress {
+pub struct XorMappedAddress {
     //generell attribute:
     type_: u16,
     length: u16,
@@ -102,16 +111,16 @@ impl XorMappedAddress {
 
 //-----
 
-struct UnknownAttributes {
+pub struct UnknownAttributes {
     //generell attribute:
     type_: u16,
     length: u16,
     //Spesielt til error:
-    attributes: Vec<Attribute>,
+    attributes: Vec<Box<dyn Attribute>>,
 }
 
 impl UnknownAttributes {
-    pub fn new(vec: Vec<Attribute>) -> Self {
+    pub fn new(vec: Vec<Box<dyn Attribute>>) -> Self {
         UnknownAttributes {
             type_: UNKNOWN_ATTRIBUTES,
             length: (vec.len() * 2) as u16, //Funker ikke, addressen varierer fra 32-128 bits

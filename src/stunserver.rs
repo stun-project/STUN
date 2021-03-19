@@ -190,7 +190,7 @@ async fn handle_udp_connection(
     message_len: usize,
 ) -> Result<(), Box<dyn Error>> {
     println!("{:?}", &buffer[..message_len]);
-    //handle_header(&buffer[..message_len]);
+    let message = handle_message(&buffer[..message_len]);
     Ok(())
 }
 

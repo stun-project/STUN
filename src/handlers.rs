@@ -1,4 +1,4 @@
-use crate::attributes::{Attribute, ErrorCode, ERROR_CODE};
+use crate::attributes::{Attribute, AttributeEnum, ErrorCode, ERROR_CODE};
 use crate::errors::ErrorCodeEnum;
 use crate::method::{StunBody, StunHeader, StunMessage, MAGIC_COOKIE};
 use byteorder::{BigEndian, ByteOrder};
@@ -6,6 +6,7 @@ pub const BINDING_REQUEST: u16 = 0x0001;
 pub const BINDING_RESPONSE: u16 = 0x0101;
 pub const BINDING_ERROR_RESPONSE: u16 = 0x0111;
 pub const BINDING_INDICATION: u16 = 0x0011;
+use std::convert::TryInto;
 
 #[test]
 fn testHandlers() {
@@ -32,12 +33,12 @@ pub fn handle_message(stun_message: &[u8]) -> StunMessage {
             stun_header: StunHeader::new(
                 BINDING_ERROR_RESPONSE,
                 BODY_LENGTH,
-                BigEndian::read_u128(&stun_message[8..19]),
+                stun_message[8..20].try_into().unwrap(),
             ),
             stun_body: StunBody {
-                attributes: vec![Attribute::ERROR_CODE({
-                    ErrorCode::new(ErrorCodeEnum::BAD_REQUEST as u32, "Yes".to_owned())
-                })],
+                attributes: vec![Box::new(AttributeEnum::ERROR_CODE({
+                    ErrorCode::new(ErrorCodeEnum::BadRequest as u32, "Yes".to_owned())
+                }))],
             },
         };
     }
@@ -45,12 +46,12 @@ pub fn handle_message(stun_message: &[u8]) -> StunMessage {
         stun_header: StunHeader::new(
             BINDING_RESPONSE,
             BODY_LENGTH,
-            BigEndian::read_u128(&stun_message[8..19]),
+            stun_message[8..20].try_into().unwrap(),
         ),
         stun_body: StunBody {
-            attributes: vec![Attribute::ERROR_CODE({
-                ErrorCode::new(ErrorCodeEnum::BAD_REQUEST as u32, "Yes".to_owned())
-            })],
+            attributes: vec![Box::new(AttributeEnum::ERROR_CODE({
+                ErrorCode::new(ErrorCodeEnum::BadRequest as u32, "Yes".to_owned())
+            }))],
         },
     };
 }
@@ -60,12 +61,13 @@ pub fn check_validity(stun_message: &[u8]) -> bool {
     if stun_message[0] >= 64 {
         return false;
     }
-    if BigEndian::read_u32(&stun_message[4..7]) != MAGIC_COOKIE {
+    if BigEndian::read_u32(&stun_message[4..8]) != MAGIC_COOKIE {
         return false;
     }
-    let type_ = BigEndian::read_u16(&stun_message[0..1]);
+    let type_ = BigEndian::read_u16(&stun_message[0..2]);
     if type_ != BINDING_REQUEST && type_ != BINDING_INDICATION {
         return false;
     }
+    println!("Message is valid");
     return true;
 }

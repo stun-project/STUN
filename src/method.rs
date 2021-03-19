@@ -1,40 +1,44 @@
 use crate::attributes::*;
-//use byteorder::{BigEndian, ByteOrder};
+use byteorder::{BigEndian, ByteOrder};
+
 pub const MAGIC_COOKIE: u32 = 0x2112_A442;
 
 pub struct StunHeader {
     type_: u16,
     length: u16,
-    magic_cookie: u32,
-    transaction_id: u128,
+    transaction_id: [u8; 12],
 }
 
 impl StunHeader {
-    pub fn serialize(&self) -> &mut Vec<u8> {
-        let mut vec: Vec<u8> = Vec::new();
-        todo!();
-        //return vec;
+    pub fn serialize(&self) -> Vec<u8> {
+        let mut stun_header: Vec<u8> = Vec::new();
+
+        BigEndian::write_u16(&mut stun_header, self.type_);
+        BigEndian::write_u16(&mut stun_header, self.length);
+        BigEndian::write_u32(&mut stun_header, MAGIC_COOKIE);
+        stun_header.append(&mut self.transaction_id.to_vec());
+
+        return stun_header;
     }
 
-    pub fn new(type_: u16, length: u16, transaction_id: u128) -> Self {
+    pub fn new(type_: u16, length: u16, transaction_id: [u8; 12]) -> Self {
         StunHeader {
             type_: type_,
             length: length,
-            magic_cookie: MAGIC_COOKIE,
             transaction_id: transaction_id,
         }
     }
 }
 
 pub struct StunBody {
-    pub attributes: Vec<Attribute>,
+    pub attributes: Vec<Box<dyn Attribute>>,
 }
 
 impl StunBody {
     pub fn serialize(&self) -> &mut Vec<u8> {
         let mut vec: Vec<u8> = Vec::new();
         for attribute in &self.attributes {
-            //vec.append(attribute.serialize);
+            attribute.serialize();
         }
         todo!();
         //return vec;
@@ -49,8 +53,8 @@ pub struct StunMessage {
 impl StunMessage {
     pub fn serialize(&self) -> Vec<u8> {
         let mut vec: Vec<u8> = Vec::new();
-        vec.append(self.stun_header.serialize());
-        vec.append(self.stun_body.serialize());
+        vec.append(&mut self.stun_header.serialize());
+        vec.append(&mut self.stun_body.serialize());
         return vec;
     }
 }
