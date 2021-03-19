@@ -52,7 +52,7 @@ pub fn handle_message(stun_message: &[u8],port: u16, address: IpAddr) -> StunMes
         stun_body: StunBody {
             attributes: vec![
                 Box::new(AttributeEnum::XOR_MAPPED_ADDRESS({
-                XorMappedAddress::new(0x01,port,address)
+                XorMappedAddress::new(0x01,port,address,stun_message[8..20].try_into().unwrap())
             })),
                 Box::new(AttributeEnum::MAPPED_ADDRESS({
                     MappedAddress::new(0x01,port,address)
