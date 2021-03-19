@@ -182,8 +182,19 @@ impl UnknownAttributes {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+    use std::net::SocketAddr;
+    const transaction_id: [u8; 12] = [
+        0xb7, 0xe7, 0xa7, 0x01, 0xbc, 0x34, 0xd6, 0x86, 0xfa, 0x87, 0xdf, 0xae,
+    ];
+
     #[test]
-    fn test() {
-        assert_eq!(1, 1);
+    fn test_xor_encoding_v4() {
+        let base_address: SocketAddr = "192.0.2.1:32853".parse().unwrap();
+
+        assert_eq!(
+            XorMappedAddress::new(base_address, &transaction_id)._address,
+            "225.18.166.67:41287".parse().unwrap()
+        );
     }
 }
