@@ -1,9 +1,14 @@
-
-
-use byteorder::{ByteOrder, BigEndian};
+use crate::attributes::{Attribute, ErrorCode, ERROR_CODE};
+use crate::errors::ErrorCodeEnum;
+use crate::method::{StunBody, StunHeader, StunMessage, MAGIC_COOKIE};
+use byteorder::{BigEndian, ByteOrder};
+pub const BINDING_REQUEST: u16 = 0x0001;
+pub const BINDING_RESPONSE: u16 = 0x0101;
+pub const BINDING_ERROR_RESPONSE: u16 = 0x0111;
+pub const BINDING_INDICATION: u16 = 0x0011;
 
 #[test]
-fn testHandlers(){
+fn testHandlers() {
 
     // println!("{:?}",handle_header());
 }
@@ -18,41 +23,48 @@ fn testHandlers(){
 //     return header_type;
 // }
 
-pub fn handle_message(stunMessage: &[u8]){
-    let mut response: Vec<u8> = Vec::new();
-    if !check_validity(&stunMessage) {
-        return StunMessage{
-            stunHeader:StunHeader::new(BINDING_ERROR_RESPONSE,length_body/*hmm*/,MAGIC_COOKIE,BigEndian::read_u128(&stunHeader[8..19])),
-            stunPayload:StunBody{
-                attributes:vec![Attribute{
-                    type_:ERROR_CODE,
-                    length://length,
-                    value: //value
-                }];
-            }
-        }
-    }
-    //---
-    return StunMessage{
-        stunHeader:StunHeader::new(BINDING_RESPONSE,length_body/*hmm*/,MAGIC_COOKIE,BigEndian::read_u128(&stunHeader[8..19])),
-        stunPayload:StunBody{
-            
-        }
-    }
+const BODY_LENGTH: u16 = 6;
 
-    //---
+pub fn handle_message(stun_message: &[u8]) -> StunMessage {
+    let mut response: Vec<u8> = Vec::new();
+    if !check_validity(&stun_message) {
+        return StunMessage {
+            stun_header: StunHeader::new(
+                BINDING_ERROR_RESPONSE,
+                BODY_LENGTH,
+                BigEndian::read_u128(&stun_message[8..19]),
+            ),
+            stun_body: StunBody {
+                attributes: vec![Attribute::ERROR_CODE({
+                    ErrorCode::new(ErrorCodeEnum::BAD_REQUEST as u32, "Yes".to_owned())
+                })],
+            },
+        };
+    }
+    return StunMessage {
+        stun_header: StunHeader::new(
+            BINDING_RESPONSE,
+            BODY_LENGTH,
+            BigEndian::read_u128(&stun_message[8..19]),
+        ),
+        stun_body: StunBody {
+            attributes: vec![Attribute::ERROR_CODE({
+                ErrorCode::new(ErrorCodeEnum::BAD_REQUEST as u32, "Yes".to_owned())
+            })],
+        },
+    };
 }
 
 //TODO - check length []
-pub fn check_validity(stunMessage: &[u8]){
-    if stunMessage[0] >= 64 {
+pub fn check_validity(stun_message: &[u8]) -> bool {
+    if stun_message[0] >= 64 {
         return false;
     }
-    if BigEndian::read_u32(&stunHeader[4..7]) != MAGIC_COOKIE{
+    if BigEndian::read_u32(&stun_message[4..7]) != MAGIC_COOKIE {
         return false;
     }
-    let type_ = BigEndian::read_u16(&stunHeader[0..1]);
-    if type_ != BINDING_REQUEST && type_ != BINDING_INDICATION{
+    let type_ = BigEndian::read_u16(&stun_message[0..1]);
+    if type_ != BINDING_REQUEST && type_ != BINDING_INDICATION {
         return false;
     }
     return true;

@@ -1,31 +1,8 @@
-- [ ] Try Alternate
-- [ ] Bad Request
-- [ ] Unauthorized
-- [ ] Unknown Attribute
-- [ ] Stale Nonce
-- [ ] Server Error
-
-struct BadRequest{
-    pub const ERROR_CODE: u16 = 400;
+pub enum ErrorCodeEnum {
+    BAD_REQUEST = 400,
+    UNAUTHORIZED = 401,
+    TRY_ALTERNATE = 300,
+    UNKNOWN_ATTRIBUTES = 420,
+    STALE_NONCE = 438,
+    SERVER_ERROR = 500,
 }
-
-struct Unauthorized{
-    pub const ERROR_CODE: u16 = 401;
-}
-
-struct StaleNonce{
-    pub const ERROR_CODE: u16 = 438;
-}
-
-struct TryAlternate {
-    pub const ERROR_CODE: u16 = 300;
-}
-
-struct UnknownAttribute {
-    pub const ERROR_CODE: u16 = 420;
-}
-
-struct ServerError {
-    pub const ERROR_CODE: u16 = 500;
-}
-

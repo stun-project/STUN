@@ -1,9 +1,5 @@
 use crate::attributes::*;
 //use byteorder::{BigEndian, ByteOrder};
-pub const BINDING_REQUEST: u16 = 0x0001;
-pub const BINDING_RESPONSE: u16 = 0x0101;
-pub const BINDING_ERROR_RESPONSE: u16 = 0x0111;
-pub const BINDING_INDICATION: u16 = 0x0011;
 pub const MAGIC_COOKIE: u32 = 0x2112_A442;
 
 pub struct StunHeader {
@@ -31,13 +27,13 @@ impl StunHeader {
 }
 
 pub struct StunBody {
-    attributes: Vec<Attribute>,
+    pub attributes: Vec<Attribute>,
 }
 
 impl StunBody {
     pub fn serialize(&self) -> &mut Vec<u8> {
         let mut vec: Vec<u8> = Vec::new();
-        for attribute in self.attributes {
+        for attribute in &self.attributes {
             //vec.append(attribute.serialize);
         }
         todo!();
@@ -45,9 +41,9 @@ impl StunBody {
     }
 }
 
-struct StunMessage {
-    stun_header: StunHeader,
-    stun_body: StunBody,
+pub struct StunMessage {
+    pub stun_header: StunHeader,
+    pub stun_body: StunBody,
 }
 
 impl StunMessage {
