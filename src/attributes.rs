@@ -10,7 +10,7 @@ pub const SOFTWARE: u16 = 0x8022;
 pub const ALTERNATE_SERVER: u16 = 0x8023;
 pub const FINGERPRINT: u16 = 0x8028;
 
-enum Attribute{
+pub enum Attribute{
     ERROR_CODE(ErrorCode),
     MAPPED_ADDRESS,
     XOR_MAPPED_ADDRESS,

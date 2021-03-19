@@ -1,28 +1,22 @@
-mod method;
-use method;
-mod errors;
-use errors;
-mod stun;
-use stun;
-mod attributes;
-use attributes;
+
+
 use byteorder::{ByteOrder, BigEndian};
 
 #[test]
 fn testHandlers(){
-    println!("{:?}",handle_header());
+
+    // println!("{:?}",handle_header());
 }
 
-pub fn handle_header(stunHeader: &[u8;20]){ //stunMessage skal defineres som struct
-    let type_ = BigEndian::read_u16(&stunHeader[0..1]);
-    let length = BigEndian::read_u16(&stunHeader[2..3]);
-    let transaction_id = BigEndian::read_u128(&stunHeader[8..19])
-    let header_type = match type_{
-        BINDING_REQUEST => BindingRequest::new(length,transaction_id);
-
-    }
-    return header_type;
-}
+// pub fn handle_header(stunHeader: &[u8;20]){ //stunMessage skal defineres som struct
+//     let type_ = BigEndian::read_u16(&stunHeader[0..1]);
+//     let length = BigEndian::read_u16(&stunHeader[2..3]);
+//     let transaction_id = BigEndian::read_u128(&stunHeader[8..19])
+//     let header_type = match type_{
+//        // BINDING_REQUEST => BindingRequest::new(length,transaction_id),
+//     };
+//     return header_type;
+// }
 
 pub fn handle_message(stunMessage: &[u8]){
     let mut response: Vec<u8> = Vec::new();

@@ -1,5 +1,5 @@
 extern crate tokio;
-
+use crate::handlers::{check_validity, handle_message};
 use async_trait::async_trait;
 use std::error::Error;
 use std::net::{IpAddr, Ipv4Addr, SocketAddr};
@@ -189,7 +189,8 @@ async fn handle_udp_connection(
     buffer: &[u8; 1024],
     message_len: usize,
 ) -> Result<(), Box<dyn Error>> {
-    println!("{}", String::from_utf8_lossy(&buffer[..message_len]));
+    println!("{:?}", &buffer[..message_len]);
+    //handle_header(&buffer[..message_len]);
     Ok(())
 }
 
