@@ -36,7 +36,7 @@ pub struct StunBody {
 
 impl StunBody {
     pub fn serialize(&self) -> &mut Vec<u8> {
-        let mut vec: Vec<u8> = Vec::new();
+        let mut _vec: Vec<u8> = Vec::new();
         for attribute in &self.attributes {
             attribute.serialize();
         }
@@ -65,3 +65,11 @@ impl StunMessage {
 // vec.write_u8::<BigEndian>(self.magic_cookie);
 // vec.write_u8::<BigEndian>(self.transaction_id); //denne kan legge til ekstra nuller (0), se struct
 // return vec;
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn test() {
+        assert_eq!(1, 1);
+    }
+}

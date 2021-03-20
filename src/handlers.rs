@@ -1,5 +1,5 @@
-use crate::attributes::*;
-use std::net::{IpAddr, Ipv4Addr, SocketAddr};
+use crate::attributes::{AttributeEnum, XorMappedAddress, ErrorCode, MappedAddress};
+use std::net::{IpAddr, SocketAddr};
 use crate::errors::ErrorCodeEnum;
 use crate::method::{StunBody, StunHeader, StunMessage, MAGIC_COOKIE};
 use byteorder::{BigEndian, ByteOrder};
@@ -8,12 +8,6 @@ pub const BINDING_RESPONSE: u16 = 0x0101;
 pub const BINDING_ERROR_RESPONSE: u16 = 0x0111;
 pub const BINDING_INDICATION: u16 = 0x0011;
 use std::convert::TryInto;
-
-#[test]
-fn testHandlers() {
-
-    // println!("{:?}",handle_header());
-}
 
 // pub fn handle_header(stunHeader: &[u8;20]){ //stunMessage skal defineres som struct
 //     let type_ = BigEndian::read_u16(&stunHeader[0..1]);
@@ -27,8 +21,8 @@ fn testHandlers() {
 
 const BODY_LENGTH: u16 = 6;
 
-pub fn handle_message(stun_message: &[u8],port: u16, address: IpAddr) -> StunMessage {
-    let mut response: Vec<u8> = Vec::new();
+pub fn handle_message(stun_message: &[u8], port: u16, address: IpAddr) -> StunMessage {
+    //let mut response: Vec<u8> = Vec::new();
     if !check_validity(&stun_message) {
         return StunMessage {
             stun_header: StunHeader::new(
@@ -38,7 +32,10 @@ pub fn handle_message(stun_message: &[u8],port: u16, address: IpAddr) -> StunMes
             ),
             stun_body: StunBody {
                 attributes: vec![Box::new(AttributeEnum::ErrorCode({
-                    ErrorCode::new(ErrorCodeEnum::BadRequest as u32, ErrorCodeEnum::reason_phrase(&ErrorCodeEnum::BadRequest).to_string())
+                    ErrorCode::new(
+                        ErrorCodeEnum::BadRequest as u32,
+                        ErrorCodeEnum::reason_phrase(&ErrorCodeEnum::BadRequest).to_string(),
+                    )
                 }))],
             },
         };
@@ -77,4 +74,12 @@ pub fn check_validity(stun_message: &[u8]) -> bool {
     }
     println!("Message is valid");
     return true;
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn test() {
+        assert_eq!(1, 1);
+    }
 }
