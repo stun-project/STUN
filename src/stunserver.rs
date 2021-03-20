@@ -4,7 +4,7 @@ use async_trait::async_trait;
 use std::error::Error;
 use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 use std::str::FromStr;
-use tokio::io::AsyncReadExt;
+use tokio::io::{AsyncReadExt,AsyncWriteExt};
 use tokio::net::{TcpListener, TcpStream, UdpSocket};
 
 #[async_trait]
@@ -184,10 +184,12 @@ async fn handle_tcp_connection(mut stream: TcpStream) -> Result<(), Box<dyn Erro
     println!("{}", String::from_utf8_lossy(&buffer[..length]));
     match stream.peer_addr() {
         Ok(socket_addr) => {
+            //stream.write(&handle_message(&buffer, socket_addr).serialize()[..]).await?; //skal det være: ?
             handle_message(&buffer, socket_addr);
         }
         Err(e) => panic!(e),
     };
+    
     Ok(())
 }
 

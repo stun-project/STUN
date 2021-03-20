@@ -1,7 +1,7 @@
 use crate::attributes::{AttributeEnum, XorMappedAddress, ErrorCode, MappedAddress};
 use std::net::SocketAddr;
 use crate::errors::ErrorCodeEnum;
-use crate::method::{StunBody, StunHeader, StunMessage, MAGIC_COOKIE};
+use crate::message::{StunBody, StunHeader, StunMessage, MAGIC_COOKIE};
 use byteorder::{BigEndian, ByteOrder};
 pub const BINDING_REQUEST: u16 = 0x0001;
 pub const BINDING_RESPONSE: u16 = 0x0101;
