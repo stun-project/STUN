@@ -67,19 +67,26 @@ pub struct MappedAddress {
     //generell attribute:
     _type_: u16,
     _length: u16,
-    //Spesielt til error:
-    _family: u8,
-    _port: u16,
-    _address: IpAddr,
+    //Spesielt til MappedAddress:
+    _address: SocketAddr,
 }
 
 impl MappedAddress {
-    pub fn new(family: u8, port: u16, address: IpAddr) -> Self {
-        MappedAddress {
+    pub fn new(address: SocketAddr) -> Self {
+        let len:u16;
+
+        match address.ip() {
+            IpAddr::V4(_ip) => {
+                len = 8;
+            }
+            IpAddr::V6(_ip) => {
+                len = 20;
+            }
+        }
+
+        return MappedAddress {
             _type_: MAPPED_ADDRESS,
-            _length: (4 + address.to_string().len()) as u16, //Funker ikke, addressen varierer fra 32-128 bits
-            _family: family,
-            _port: port,
+            _length: len,
             _address: address,
         }
     }
@@ -97,7 +104,7 @@ pub struct XorMappedAddress {
     //generell attribute:
      _type: u16,
     _length: u16,
-    //Spesielt til error:
+    //Spesielt til XorMappedAddress:
     _address: SocketAddr,
 }
 

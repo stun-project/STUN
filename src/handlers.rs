@@ -52,7 +52,7 @@ pub fn handle_message(stun_message: &[u8], port: u16, address: IpAddr) -> StunMe
                 XorMappedAddress::new(SocketAddr::new(address,port),stun_message[8..20].try_into().unwrap())
             })),
                 Box::new(AttributeEnum::MappedAddress({
-                    MappedAddress::new(0x01,port,address)
+                    MappedAddress::new(SocketAddr::new(address,port))
                 }))
             
             ],
