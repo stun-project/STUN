@@ -1,5 +1,6 @@
-use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 use byteorder::{BigEndian, ByteOrder};
+use std::net::{IpAddr, SocketAddr, Ipv4Addr};
+
 pub const ERROR_CODE: u16 = 0x0009;
 pub const MAPPED_ADDRESS: u16 = 0x0001;
 pub const USERNAME: u16 = 0x0006;
@@ -13,10 +14,10 @@ pub const ALTERNATE_SERVER: u16 = 0x8023;
 pub const FINGERPRINT: u16 = 0x8028;
 
 pub enum AttributeEnum {
-    ERROR_CODE(ErrorCode),
-    MAPPED_ADDRESS(MappedAddress),
-    XOR_MAPPED_ADDRESS(XorMappedAddress),
-    UNKNOWN_ATTRIBUTES(UnknownAttributes),
+    ErrorCode(ErrorCode),
+    MappedAddress(MappedAddress),
+    XorMappedAddress(XorMappedAddress),
+    UnknownAttributes(UnknownAttributes),
 }
 impl Attribute for AttributeEnum {
     fn serialize(&self) -> Vec<u8> {
@@ -56,7 +57,7 @@ impl Attribute for ErrorCode {
         BigEndian::write_u32(&mut stun_attribute, self.status_code);
         stun_attribute.append(&mut self.reason_phrase.clone().into_bytes());
 
-        return stun_attribute
+        return stun_attribute;
     }
 }
 
@@ -64,27 +65,27 @@ impl Attribute for ErrorCode {
 
 pub struct MappedAddress {
     //generell attribute:
-    type_: u16,
-    length: u16,
+    _type_: u16,
+    _length: u16,
     //Spesielt til error:
-    family: u8,
-    port: u16,
-    address: IpAddr,
+    _family: u8,
+    _port: u16,
+    _address: IpAddr,
 }
 
 impl MappedAddress {
     pub fn new(family: u8, port: u16, address: IpAddr) -> Self {
         MappedAddress {
-            type_: MAPPED_ADDRESS,
-            length: (4 + address.to_string().len()) as u16, //Funker ikke, addressen varierer fra 32-128 bits
-            family: family,
-            port: port,
-            address: address,
+            _type_: MAPPED_ADDRESS,
+            _length: (4 + address.to_string().len()) as u16, //Funker ikke, addressen varierer fra 32-128 bits
+            _family: family,
+            _port: port,
+            _address: address,
         }
     }
 
     pub fn serialize(&self) {
-        let mut vec: Vec<u8> = Vec::new();
+        //let mut vec: Vec<u8> = Vec::new();
         //TODO
         //return vec;
     }
@@ -94,69 +95,64 @@ impl MappedAddress {
 //TODO: alt med xor-mapped...
 pub struct XorMappedAddress {
     //generell attribute:
-    type_: u16,
-    length: u16,
+     _type: u16,
+    _length: u16,
     //Spesielt til error:
-    address: SocketAddr,
+    _address: SocketAddr,
 }
 
 impl XorMappedAddress {
-    pub fn new(addr: SocketAddr, transaction_id:&[u8]) -> Self{
-        let mc:u16 = (0x2112_A442>>16) as u16;
-        let mc32: u32 = 0x2112_A442;
-        let mut leng:u16;
-        let mut xor_port:u16 = addr.port() ^ mc;
-        let mut 
+    pub fn new(addr: SocketAddr, _transaction_id: &[u8]) -> Self {
+        let _mc16: u16 = (0x2112_A442 >> 16) as u16;
+        let _mc32: u32 = 0x2112_A442;
+        let mut _leng: u16;
+        let mut _xor_port: u16 = addr.port() ^ _mc16;
+        let mut address: SocketAddr = addr;
         match addr.ip() {
             IpAddr::V4(ip) => {
-                leng = 8;
-                let dg = ip.octets();
+                _leng = 8;
+                let mut value = [0 as u8;4];
+                for i in 0..4 {
+                    value[i] = ip.octets()[i] ^ ((_mc32 << 4*(i*2)) >> 24) as u8;
+                }
+                address = SocketAddr::new(IpAddr::V4(Ipv4Addr::new(value[0],value[1],value[2],value[3])),_xor_port);
             }
-            IpAddr::V6(ip) => {
-                leng = 20;
+            IpAddr::V6(_ip) => {
+                _leng = 20;
+
             }
         }
+        //byte order, mest til minst signifikant
 
-        
-
-
-        // X-Port is computed by taking the mapped port in host byte order,
-        // XOR'ing it with the most significant 16 bits of the magic cookie, and
-        // then the converting the result to network byte order.
-
-        
         //address
-        if family == 0x01 {
+        //if family == 0x01 {
         //  If the IP
         //    address family is IPv4, X-Address is computed by taking the mapped IP
         //    address in host byte order, XOR'ing it with the magic cookie, and
-        //    converting the result to network byte order. 
-            //addr = address ^ 0x2112_A442
-        }else{
-            // If the IP address
-            // family is IPv6, X-Address is computed by taking the mapped IP address
-            // in host byte order, XOR'ing it with the concatenation of the magic
-            // cookie and the 96-bit transaction ID, and converting the result to
-            // network byte order.
-            let xor_value:u128; //concaticating...
-            //addr = address ^ xor_value;
-        }
+        //    converting the result to network byte order.
+        //addr = address ^ 0x2112_A442
+        //} else {
+        // If the IP address
+        // family is IPv6, X-Address is computed by taking the mapped IP address
+        // in host byte order, XOR'ing it with the concatenation of the magic
+        // cookie and the 96-bit transaction ID, and converting the result to
+        // network byte order.
+        //let xor_value: u128; //concaticating...
+        //addr = address ^ xor_value;
+        //}
 
-        //Fikse adresse, 
-
-
+        //Fikse adresse,
         return XorMappedAddress{
-            type_:XOR_MAPPED_ADDRESS,
-            length:leng,
-            address:address // denne skal xores
+            _type:XOR_MAPPED_ADDRESS,
+            _length:_leng,
+            _address:address
         }
+
     }
 
     pub fn serialize(&self) {
         todo!()
     }
-
-
 }
 
 //-----
@@ -178,7 +174,7 @@ impl UnknownAttributes {
         }
     }
 
-    pub fn serialize(&self)  -> Vec<u8> {
+    pub fn serialize(&self) -> Vec<u8> {
         let mut stun_attribute: Vec<u8> = Vec::new();
 
         BigEndian::write_u16(&mut stun_attribute, self.type_);
@@ -187,6 +183,25 @@ impl UnknownAttributes {
             BigEndian::write_u16(&mut stun_attribute, attribute)
         }
 
-        return stun_attribute
+        return stun_attribute;
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::net::SocketAddr;
+    const TRANSACTION_ID: [u8; 12] = [
+        0xb7, 0xe7, 0xa7, 0x01, 0xbc, 0x34, 0xd6, 0x86, 0xfa, 0x87, 0xdf, 0xae,
+    ];
+
+    #[test]
+    fn test_xor_encoding_v4() {
+        let base_address: SocketAddr = "192.0.2.1:32853".parse().unwrap();
+
+        assert_eq!(
+            XorMappedAddress::new(base_address, &TRANSACTION_ID)._address,
+            "225.18.166.67:41287".parse().unwrap()
+        );
     }
 }

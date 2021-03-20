@@ -1,5 +1,5 @@
 use crate::attributes::*;
-use std::net::{IpAddr, Ipv4Addr};
+use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 use crate::errors::ErrorCodeEnum;
 use crate::method::{StunBody, StunHeader, StunMessage, MAGIC_COOKIE};
 use byteorder::{BigEndian, ByteOrder};
@@ -37,7 +37,7 @@ pub fn handle_message(stun_message: &[u8],port: u16, address: IpAddr) -> StunMes
                 stun_message[8..20].try_into().unwrap(),
             ),
             stun_body: StunBody {
-                attributes: vec![Box::new(AttributeEnum::ERROR_CODE({
+                attributes: vec![Box::new(AttributeEnum::ErrorCode({
                     ErrorCode::new(ErrorCodeEnum::BadRequest as u32, ErrorCodeEnum::reason_phrase(&ErrorCodeEnum::BadRequest).to_string())
                 }))],
             },
@@ -51,10 +51,10 @@ pub fn handle_message(stun_message: &[u8],port: u16, address: IpAddr) -> StunMes
         ),
         stun_body: StunBody {
             attributes: vec![
-                Box::new(AttributeEnum::XOR_MAPPED_ADDRESS({
-                XorMappedAddress::new(0x01,port,address,stun_message[8..20].try_into().unwrap())
+                Box::new(AttributeEnum::XorMappedAddress({
+                XorMappedAddress::new(SocketAddr::new(address,port),stun_message[8..20].try_into().unwrap())
             })),
-                Box::new(AttributeEnum::MAPPED_ADDRESS({
+                Box::new(AttributeEnum::MappedAddress({
                     MappedAddress::new(0x01,port,address)
                 }))
             
