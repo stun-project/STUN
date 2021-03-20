@@ -120,7 +120,7 @@ impl XorMappedAddress {
                 _leng = 8;
                 let mut value = [0 as u8;4];
                 for i in 0..4 {
-                    value[i] = ip.octets()[i] ^ ((_mc32 << 4*(i*2)) >> 24) as u8;
+                    value[i] = ip.octets()[i] ^ ((_mc32 << 8*i) >> 24) as u8;
                 }
                 address = SocketAddr::new(IpAddr::V4(Ipv4Addr::new(value[0],value[1],value[2],value[3])),_xor_port);
             }
@@ -133,7 +133,7 @@ impl XorMappedAddress {
                 let xor_value: u128 = xor_value_string.parse().unwrap();
                 let mut value = [0 as u16;8];
                 for i in 0..8 {
-                    value[i] = ip.segments()[i] ^ ((xor_value << 16*(i*2)) >> 112) as u16;
+                    value[i] = ip.segments()[i] ^ ((xor_value << 16*i) >> 112) as u16;
                 }
 
                 let addr = From::from(value);
