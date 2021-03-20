@@ -242,7 +242,7 @@ mod tests {
         let base_address: SocketAddr = "192.0.2.1:32853".parse().unwrap();
 
         assert_eq!(
-            XorMappedAddress::new(base_address, &TRANSACTION_ID)._address,
+            XorMappedAddress::new(base_address, &TRANSACTION_ID).address,
             "225.18.166.67:41287".parse().unwrap()
         );
     }
