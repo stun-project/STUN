@@ -57,6 +57,8 @@ impl Attribute for ErrorCode {
         BigEndian::write_u32(&mut stun_attribute, self.status_code);
         stun_attribute.append(&mut self.reason_phrase.clone().into_bytes());
 
+        add_padding(self.length,&mut stun_attribute);
+
         return stun_attribute;
     }
 }
@@ -65,10 +67,10 @@ impl Attribute for ErrorCode {
 
 pub struct MappedAddress {
     //generell attribute:
-    _type_: u16,
-    _length: u16,
+    type_: u16,
+    length: u16,
     //Spesielt til MappedAddress:
-    _address: SocketAddr,
+    address: SocketAddr,
 }
 
 impl MappedAddress {
@@ -85,16 +87,31 @@ impl MappedAddress {
         }
 
         return MappedAddress {
-            _type_: MAPPED_ADDRESS,
-            _length: len,
-            _address: address,
+            type_: MAPPED_ADDRESS,
+            length: len,
+            address: address,
         }
     }
 
-    pub fn serialize(&self) {
-        //let mut vec: Vec<u8> = Vec::new();
-        //TODO
-        //return vec;
+    pub fn serialize(&self) -> Vec<u8> {
+        let mut stun_attribute: Vec<u8> = Vec::new();
+
+        BigEndian::write_u16(&mut stun_attribute, self.type_);
+        BigEndian::write_u16(&mut stun_attribute, self.length);
+        match self.address.ip(){
+            IpAddr::V4(ip) => {
+                BigEndian::write_u16(&mut stun_attribute, 0x01);
+                BigEndian::write_u16(&mut stun_attribute,self.address.port());
+                stun_attribute.append(&mut ip.octets().to_vec());
+            }
+            IpAddr::V6(ip) => {
+                BigEndian::write_u16(&mut stun_attribute, 0x02);
+                BigEndian::write_u16(&mut stun_attribute, self.address.port());
+                stun_attribute.append(&mut ip.octets().to_vec());
+            }
+        }
+        add_padding(self.length,&mut stun_attribute);
+        return stun_attribute;
     }
 }
 
@@ -102,55 +119,72 @@ impl MappedAddress {
 
 pub struct XorMappedAddress {
     //generell attribute:
-     _type: u16,
-    _length: u16,
+     type_: u16,
+    length: u16,
     //Spesielt til XorMappedAddress:
-    _address: SocketAddr,
+    address: SocketAddr,
 }
 
 impl XorMappedAddress {
-    pub fn new(addr: SocketAddr, _transaction_id: &[u8]) -> Self {
-        let _mc16: u16 = (0x2112_A442 >> 16) as u16;
-        let _mc32: u32 = 0x2112_A442;
-        let mut _leng: u16;
-        let mut _xor_port: u16 = addr.port() ^ _mc16;
+    pub fn new(addr: SocketAddr, transaction_id: &[u8]) -> Self {
+        let mc16: u16 = (0x2112_A442 >> 16) as u16;
+        let mc32: u32 = 0x2112_A442;
+        let leng: u16;
+        let xor_port: u16 = addr.port() ^ mc16;
         let address: SocketAddr;
         match addr.ip() {
             IpAddr::V4(ip) => {
-                _leng = 8;
+                leng = 8;
                 let mut value = [0 as u8;4];
                 for i in 0..4 {
-                    value[i] = ip.octets()[i] ^ ((_mc32 << 8*i) >> 24) as u8;
+                    value[i] = ip.octets()[i] ^ ((mc32 << 8*i) >> 24) as u8;
                 }
-                address = SocketAddr::new(IpAddr::V4(Ipv4Addr::new(value[0],value[1],value[2],value[3])),_xor_port);
+                address = SocketAddr::new(IpAddr::V4(Ipv4Addr::new(value[0],value[1],value[2],value[3])),xor_port);
             }
             IpAddr::V6(ip) => {
-                _leng = 20;
+                leng = 20;
                 
                 let mut value = [0 as u8;16];
                 for i in 0..4 {
-                    value[i] = ip.octets()[i] ^ ((_mc32 << 8*i) >> 24) as u8;
+                    value[i] = ip.octets()[i] ^ ((mc32 << 8*i) >> 24) as u8;
                 }
                 for i in 4..16 {
-                    value[i] = ip.octets()[i] ^ (_transaction_id[i-4]);
+                    value[i] = ip.octets()[i] ^ (transaction_id[i-4]);
                 }
                 let addr = From::from(value);
-                address = SocketAddr::new(IpAddr::V6(addr),_xor_port);
+                address = SocketAddr::new(IpAddr::V6(addr),xor_port);
             }
         }
-        //byte order, mest til minst signifikant
 
-        //Fikse adresse,
         return XorMappedAddress{
-            _type:XOR_MAPPED_ADDRESS,
-            _length:_leng,
-            _address:address
+            type_:XOR_MAPPED_ADDRESS,
+            length:leng,
+            address:address
         }
 
     }
 
-    pub fn serialize(&self) {
-        todo!()
+    pub fn serialize(&self) -> Vec<u8> {
+        let mut stun_attribute: Vec<u8> = Vec::new();
+
+        BigEndian::write_u16(&mut stun_attribute, self.type_);
+        BigEndian::write_u16(&mut stun_attribute, self.length);
+        match self.address.ip(){
+            IpAddr::V4(ip) => {
+                BigEndian::write_u16(&mut stun_attribute, 0x01);
+                BigEndian::write_u16(&mut stun_attribute, self.address.port());
+                stun_attribute.append(&mut ip.octets().to_vec());
+            }
+            IpAddr::V6(ip) => {
+                BigEndian::write_u16(&mut stun_attribute, 0x02);
+                BigEndian::write_u16(&mut stun_attribute, self.address.port());
+                stun_attribute.append(&mut ip.octets().to_vec());
+            }
+        }
+        
+
+        add_padding(self.length,&mut stun_attribute);
+        return stun_attribute;
     }
 }
 
@@ -160,7 +194,7 @@ pub struct UnknownAttributes {
     //generell attribute:
     type_: u16,
     length: u16,
-    //Spesielt til error:
+    //Spesielt til denne:
     attributes: Vec<u16>,
 }
 
@@ -182,7 +216,16 @@ impl UnknownAttributes {
             BigEndian::write_u16(&mut stun_attribute, attribute)
         }
 
+        add_padding(self.length,&mut stun_attribute);
         return stun_attribute;
+    }
+}
+
+fn add_padding(length:u16, stun_attribute:&mut Vec<u8>){
+    if length%4 != 0{
+        for _i in 0..(4-(length%4)) {
+            stun_attribute.push(0);
+        }
     }
 }
 
