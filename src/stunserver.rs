@@ -183,8 +183,8 @@ async fn handle_tcp_connection(mut stream: TcpStream) -> Result<(), Box<dyn Erro
     let length = stream.read(&mut buffer).await?;
     println!("{}", String::from_utf8_lossy(&buffer[..length]));
     match stream.peer_addr() {
-        Ok(a) => {
-            handle_message(&buffer, a.port(), a.ip());
+        Ok(socket_addr) => {
+            handle_message(&buffer, socket_addr);
         }
         Err(e) => panic!(e),
     };
@@ -197,7 +197,7 @@ async fn handle_udp_connection(
     address: SocketAddr,
 ) -> Result<(), Box<dyn Error>> {
     println!("{:?}", &buffer[..message_len]);
-    let _message = handle_message(&buffer[..message_len], address.port(), address.ip()); //pase address, ta imot address
+    let _message = handle_message(&buffer[..message_len], address); //pase address, ta imot address
     Ok(())
 }
 

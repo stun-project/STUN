@@ -1,5 +1,5 @@
 use crate::attributes::{AttributeEnum, XorMappedAddress, ErrorCode, MappedAddress};
-use std::net::{IpAddr, SocketAddr};
+use std::net::SocketAddr;
 use crate::errors::ErrorCodeEnum;
 use crate::method::{StunBody, StunHeader, StunMessage, MAGIC_COOKIE};
 use byteorder::{BigEndian, ByteOrder};
@@ -21,7 +21,7 @@ use std::convert::TryInto;
 
 const BODY_LENGTH: u16 = 6;
 
-pub fn handle_message(stun_message: &[u8], port: u16, address: IpAddr) -> StunMessage {
+pub fn handle_message(stun_message: &[u8],address: SocketAddr) -> StunMessage {
     //let mut response: Vec<u8> = Vec::new();
     if !check_validity(&stun_message) {
         return StunMessage {
@@ -49,10 +49,10 @@ pub fn handle_message(stun_message: &[u8], port: u16, address: IpAddr) -> StunMe
         stun_body: StunBody {
             attributes: vec![
                 Box::new(AttributeEnum::XorMappedAddress({
-                XorMappedAddress::new(SocketAddr::new(address,port),stun_message[8..20].try_into().unwrap())
+                XorMappedAddress::new(address,stun_message[8..20].try_into().unwrap())
             })),
                 Box::new(AttributeEnum::MappedAddress({
-                    MappedAddress::new(SocketAddr::new(address,port))
+                    MappedAddress::new(address)
                 }))
             
             ],
