@@ -99,7 +99,7 @@ impl MappedAddress {
 }
 
 //-----
-//TODO: alt med xor-mapped...
+
 pub struct XorMappedAddress {
     //generell attribute:
      _type: u16,
@@ -124,20 +124,26 @@ impl XorMappedAddress {
                 }
                 address = SocketAddr::new(IpAddr::V4(Ipv4Addr::new(value[0],value[1],value[2],value[3])),_xor_port);
             }
-            IpAddr::V6(_ip) => {
+            IpAddr::V6(ip) => {
                 _leng = 20;
+                let mut xor_value_string:String = _mc32.to_string().to_owned();
+                let transaction_id_str: &str = str::from_utf8(_transaction_id);
+                xor_value_string.push_str(transaction_id_str);
+                //Latter som xor_value er en string
+                let xor_value: u128 = xor_value_string.parse().unwrap();
+                let mut value = [0 as u16;8];
+                for i in 0..8 {
+                    value[i] = ip.segments()[i] ^ ((xor_value << 16*(i*2)) >> 112) as u16;
+                }
+
+                let addr = From::from(value);
+                address = SocketAddr::new(IpAddr::V6(addr),_xor_port);
+
 
             }
         }
         //byte order, mest til minst signifikant
 
-        //address
-        //if family == 0x01 {
-        //  If the IP
-        //    address family is IPv4, X-Address is computed by taking the mapped IP
-        //    address in host byte order, XOR'ing it with the magic cookie, and
-        //    converting the result to network byte order.
-        //addr = address ^ 0x2112_A442
         //} else {
         // If the IP address
         // family is IPv6, X-Address is computed by taking the mapped IP address
