@@ -114,7 +114,7 @@ impl XorMappedAddress {
         let _mc32: u32 = 0x2112_A442;
         let mut _leng: u16;
         let mut _xor_port: u16 = addr.port() ^ _mc16;
-        let mut address: SocketAddr = addr;
+        let address: SocketAddr;
         match addr.ip() {
             IpAddr::V4(ip) => {
                 _leng = 8;
@@ -126,33 +126,19 @@ impl XorMappedAddress {
             }
             IpAddr::V6(ip) => {
                 _leng = 20;
-                let mut xor_value_string:String = _mc32.to_string().to_owned();
-                let transaction_id_str: &str = str::from_utf8(_transaction_id);
-                xor_value_string.push_str(transaction_id_str);
-                //Latter som xor_value er en string
-                let xor_value: u128 = xor_value_string.parse().unwrap();
-                let mut value = [0 as u16;8];
-                for i in 0..8 {
-                    value[i] = ip.segments()[i] ^ ((xor_value << 16*i) >> 112) as u16;
+                
+                let mut value = [0 as u8;16];
+                for i in 0..4 {
+                    value[i] = ip.octets()[i] ^ ((_mc32 << 8*i) >> 24) as u8;
                 }
-
+                for i in 4..16 {
+                    value[i] = ip.octets()[i] ^ (_transaction_id[i-4]);
+                }
                 let addr = From::from(value);
                 address = SocketAddr::new(IpAddr::V6(addr),_xor_port);
-
-
             }
         }
         //byte order, mest til minst signifikant
-
-        //} else {
-        // If the IP address
-        // family is IPv6, X-Address is computed by taking the mapped IP address
-        // in host byte order, XOR'ing it with the concatenation of the magic
-        // cookie and the 96-bit transaction ID, and converting the result to
-        // network byte order.
-        //let xor_value: u128; //concaticating...
-        //addr = address ^ xor_value;
-        //}
 
         //Fikse adresse,
         return XorMappedAddress{
@@ -182,7 +168,7 @@ impl UnknownAttributes {
     pub fn new(vec: Vec<u16>) -> Self {
         UnknownAttributes {
             type_: UNKNOWN_ATTRIBUTES,
-            length: (vec.len() * 2) as u16, //Funker ikke, addressen varierer fra 32-128 bits
+            length: (vec.len() * 2) as u16, 
             attributes: vec,
         }
     }
