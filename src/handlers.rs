@@ -1,19 +1,13 @@
-use crate::attributes::*;
-use std::net::{IpAddr, Ipv4Addr};
+use crate::attributes::{Attribute, AttributeEnum, ErrorCode, MappedAddress, XorMappedAddress};
 use crate::errors::ErrorCodeEnum;
-use crate::method::{StunBody, StunHeader, StunMessage, MAGIC_COOKIE};
+use crate::message::{StunBody, StunHeader, StunMessage, MAGIC_COOKIE};
 use byteorder::{BigEndian, ByteOrder};
+use std::net::SocketAddr;
 pub const BINDING_REQUEST: u16 = 0x0001;
 pub const BINDING_RESPONSE: u16 = 0x0101;
 pub const BINDING_ERROR_RESPONSE: u16 = 0x0111;
 pub const BINDING_INDICATION: u16 = 0x0011;
 use std::convert::TryInto;
-
-#[test]
-fn testHandlers() {
-
-    // println!("{:?}",handle_header());
-}
 
 // pub fn handle_header(stunHeader: &[u8;20]){ //stunMessage skal defineres som struct
 //     let type_ = BigEndian::read_u16(&stunHeader[0..1]);
@@ -27,8 +21,8 @@ fn testHandlers() {
 
 const BODY_LENGTH: u16 = 6;
 
-pub fn handle_message(stun_message: &[u8],port: u16, address: IpAddr) -> StunMessage {
-    let mut response: Vec<u8> = Vec::new();
+pub fn handle_message(stun_message: &[u8], address: SocketAddr) -> StunMessage {
+    //let mut response: Vec<u8> = Vec::new();
     if !check_validity(&stun_message) {
         return StunMessage {
             stun_header: StunHeader::new(
@@ -37,9 +31,12 @@ pub fn handle_message(stun_message: &[u8],port: u16, address: IpAddr) -> StunMes
                 stun_message[8..20].try_into().unwrap(),
             ),
             stun_body: StunBody {
-                attributes: vec![Box::new(AttributeEnum::ERROR_CODE({
-                    ErrorCode::new(ErrorCodeEnum::BadRequest as u32, ErrorCodeEnum::reason_phrase(&ErrorCodeEnum::BadRequest).to_string())
-                }))],
+                attributes: vec![Box::new(AttributeEnum::ErrorCode({
+                    ErrorCode::new(
+                        ErrorCodeEnum::BadRequest as u32,
+                        ErrorCodeEnum::reason_phrase(&ErrorCodeEnum::BadRequest).to_string(),
+                    )
+                })) as Box<dyn Attribute + Send>],
             },
         };
     }
@@ -51,13 +48,12 @@ pub fn handle_message(stun_message: &[u8],port: u16, address: IpAddr) -> StunMes
         ),
         stun_body: StunBody {
             attributes: vec![
-                Box::new(AttributeEnum::XOR_MAPPED_ADDRESS({
-                XorMappedAddress::new(0x01,port,address,stun_message[8..20].try_into().unwrap())
-            })),
-                Box::new(AttributeEnum::MAPPED_ADDRESS({
-                    MappedAddress::new(0x01,port,address)
-                }))
-            
+                Box::new(AttributeEnum::XorMappedAddress({
+                    XorMappedAddress::new(address, stun_message[8..20].try_into().unwrap())
+                })) as Box<dyn Attribute + Send>,
+                Box::new(AttributeEnum::MappedAddress({
+                    MappedAddress::new(address)
+                })) as Box<dyn Attribute + Send>,
             ],
         },
     };
@@ -77,4 +73,12 @@ pub fn check_validity(stun_message: &[u8]) -> bool {
     }
     println!("Message is valid");
     return true;
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn test() {
+        assert_eq!(1, 1);
+    }
 }

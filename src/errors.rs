@@ -19,7 +19,6 @@ impl ErrorCodeEnum {
     }
 }
 
-
 const BAD_REQUEST_REASON: &str = "Bad Request: The request was malformed.  The client SHOULD NOT
         retry the request without modification from the previous
         attempt.  The server may not be able to generate a valid
@@ -52,3 +51,11 @@ const STALE_NONCE_REASON: &str = "Stale Nonce: The NONCE used by the client was 
         response.";
 const SERVER_ERROR_REASON: &str = "Server Error: The server has suffered a temporary error.  The
         client should try again.";
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn test() {
+        assert_eq!(1, 1);
+    }
+}
