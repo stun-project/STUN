@@ -11,7 +11,7 @@ pub struct StunHeader {
 
 impl StunHeader {
     pub fn serialize(&self) -> Vec<u8> {
-        let mut stun_header: Vec<u8> = Vec::new();
+        let mut stun_header: Vec<u8> = vec![0 as u8; 8];
 
         BigEndian::write_u16(&mut stun_header, self.type_);
         BigEndian::write_u16(&mut stun_header, self.length);
@@ -35,13 +35,12 @@ pub struct StunBody {
 }
 
 impl StunBody {
-    pub fn serialize(&self) -> &mut Vec<u8> {
-        let mut _vec: Vec<u8> = Vec::new();
+    pub fn serialize(&self) -> Vec<u8> {
+        let mut vec: Vec<u8> = Vec::new();
         for attribute in &self.attributes {
-            attribute.serialize();
+            vec.append(&mut attribute.serialize());
         }
-        todo!();
-        //return vec;
+        return vec;
     }
 }
 

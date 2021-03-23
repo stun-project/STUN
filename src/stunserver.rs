@@ -81,7 +81,7 @@ impl StunServer for MultiplexedStunServer {
                     match udp_message {
                         Ok(message) => {
                             let response = handle_udp_connection(&mut buffer, message.0, message.1 ).await?;
-                            self.udp_socket.send(&response).await?;
+                            self.udp_socket.send_to(&response, message.1).await?;
                         },
                         Err(e) => println!("{:?}", e),
                     }
@@ -199,9 +199,7 @@ async fn handle_udp_connection(
     address: SocketAddr,
 ) -> Result<Vec<u8>, Box<dyn Error>> {
     println!("{:?}", &buffer[..message_len]);
-    let _message = handle_message(&buffer[..message_len], address); //pase address, ta imot address
-    let message = handle_message(buffer, address);
-
+    let message = handle_message(&buffer[..message_len], address); //parse address, ta imot address
     let buffer = message.serialize();
 
     Ok(buffer)
