@@ -51,11 +51,11 @@ impl ErrorCode {
 }
 impl Attribute for ErrorCode {
     fn serialize(&self) -> Vec<u8> {
-        let mut stun_attribute: Vec<u8> = Vec::new();
+        let mut stun_attribute: Vec<u8> = vec![0 as u8; 8];
 
-        BigEndian::write_u16(&mut stun_attribute, self.type_);
-        BigEndian::write_u16(&mut stun_attribute, self.length);
-        BigEndian::write_u32(&mut stun_attribute, self.status_code);
+        BigEndian::write_u16(&mut stun_attribute[0..2], self.type_);
+        BigEndian::write_u16(&mut stun_attribute[2..4], self.length);
+        BigEndian::write_u32(&mut stun_attribute[4..8], self.status_code);
         stun_attribute.append(&mut self.reason_phrase.clone().into_bytes());
 
         add_padding(self.length, &mut stun_attribute);
@@ -93,29 +93,31 @@ impl MappedAddress {
             address: address,
         };
     }
+}
 
-    pub fn serialize(&self) -> Vec<u8> {
-        let mut stun_attribute: Vec<u8> = Vec::new();
+impl Attribute for MappedAddress {
+    fn serialize(&self) -> Vec<u8> {
+        let mut stun_attribute: Vec<u8> = vec![0 as u8; 8];
 
-        BigEndian::write_u16(&mut stun_attribute, self.type_);
-        BigEndian::write_u16(&mut stun_attribute, self.length);
+        BigEndian::write_u16(&mut stun_attribute[0..2], self.type_);
+
+        BigEndian::write_u16(&mut stun_attribute[2..4], self.length);
         match self.address.ip() {
             IpAddr::V4(ip) => {
-                BigEndian::write_u16(&mut stun_attribute, 0x01);
-                BigEndian::write_u16(&mut stun_attribute, self.address.port());
+                BigEndian::write_u16(&mut stun_attribute[4..6], 0x01);
+                BigEndian::write_u16(&mut stun_attribute[6..8], self.address.port());
                 stun_attribute.append(&mut ip.octets().to_vec());
             }
             IpAddr::V6(ip) => {
-                BigEndian::write_u16(&mut stun_attribute, 0x02);
-                BigEndian::write_u16(&mut stun_attribute, self.address.port());
+                BigEndian::write_u16(&mut stun_attribute[4..6], 0x02);
+                BigEndian::write_u16(&mut stun_attribute[6..8], self.address.port());
                 stun_attribute.append(&mut ip.octets().to_vec());
             }
         }
-        add_padding(self.length, &mut stun_attribute);
+        //add_padding(self.length, &mut stun_attribute);
         return stun_attribute;
     }
 }
-
 //-----
 
 pub struct XorMappedAddress {
@@ -164,26 +166,27 @@ impl XorMappedAddress {
             address: address,
         };
     }
+}
+impl Attribute for XorMappedAddress {
+    fn serialize(&self) -> Vec<u8> {
+        let mut stun_attribute: Vec<u8> = vec![0 as u8; 8];
 
-    pub fn serialize(&self) -> Vec<u8> {
-        let mut stun_attribute: Vec<u8> = Vec::new();
-
-        BigEndian::write_u16(&mut stun_attribute, self.type_);
-        BigEndian::write_u16(&mut stun_attribute, self.length);
+        BigEndian::write_u16(&mut stun_attribute[0..2], self.type_);
+        BigEndian::write_u16(&mut stun_attribute[2..4], self.length);
         match self.address.ip() {
             IpAddr::V4(ip) => {
-                BigEndian::write_u16(&mut stun_attribute, 0x01);
-                BigEndian::write_u16(&mut stun_attribute, self.address.port());
+                BigEndian::write_u16(&mut stun_attribute[4..6], 0x01);
+                BigEndian::write_u16(&mut stun_attribute[6..8], self.address.port());
                 stun_attribute.append(&mut ip.octets().to_vec());
             }
             IpAddr::V6(ip) => {
-                BigEndian::write_u16(&mut stun_attribute, 0x02);
-                BigEndian::write_u16(&mut stun_attribute, self.address.port());
+                BigEndian::write_u16(&mut stun_attribute[4..6], 0x02);
+                BigEndian::write_u16(&mut stun_attribute[6..8], self.address.port());
                 stun_attribute.append(&mut ip.octets().to_vec());
             }
         }
 
-        add_padding(self.length, &mut stun_attribute);
+        //add_padding(self.length, &mut stun_attribute);
         return stun_attribute;
     }
 }
@@ -206,14 +209,17 @@ impl UnknownAttributes {
             attributes: vec,
         }
     }
+}
 
-    pub fn serialize(&self) -> Vec<u8> {
-        let mut stun_attribute: Vec<u8> = Vec::new();
-
-        BigEndian::write_u16(&mut stun_attribute, self.type_);
-        BigEndian::write_u16(&mut stun_attribute, self.length);
+impl Attribute for UnknownAttributes {
+    fn serialize(&self) -> Vec<u8> {
+        let mut stun_attribute: Vec<u8> = vec![0 as u8; 4];
+        BigEndian::write_u16(&mut stun_attribute[0..2], self.type_);
+        BigEndian::write_u16(&mut stun_attribute[2..4], self.length);
         for &attribute in &self.attributes {
-            BigEndian::write_u16(&mut stun_attribute, attribute)
+            let mut vec = vec![0 as u8; 2];
+            BigEndian::write_u16(&mut vec[0..2], attribute);
+            stun_attribute.append(&mut vec);
         }
 
         add_padding(self.length, &mut stun_attribute);

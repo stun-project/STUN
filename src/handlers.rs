@@ -19,15 +19,13 @@ use std::convert::TryInto;
 //     return header_type;
 // }
 
-const BODY_LENGTH: u16 = 6;
-
 pub fn handle_message(stun_message: &[u8], address: SocketAddr) -> StunMessage {
     //let mut response: Vec<u8> = Vec::new();
     if !check_validity(&stun_message) {
         return StunMessage {
             stun_header: StunHeader::new(
                 BINDING_ERROR_RESPONSE,
-                BODY_LENGTH,
+                16,
                 stun_message[8..20].try_into().unwrap(),
             ),
             stun_body: StunBody {
@@ -40,22 +38,31 @@ pub fn handle_message(stun_message: &[u8], address: SocketAddr) -> StunMessage {
             },
         };
     }
+
+    let stun_body = StunBody {
+        attributes: vec![
+            Box::new(XorMappedAddress::new(
+                address,
+                stun_message[8..20].try_into().unwrap(),
+            )) as Box<dyn Attribute + Send>,
+            Box::new(MappedAddress::new(address)) as Box<dyn Attribute + Send>,
+        ],
+    };
+    let mut body_len: u16 = 0;
+
+    for attribute in &stun_body.attributes {
+        body_len += &attribute.serialize().len().try_into().unwrap();
+    }
+
+    println!("{}", body_len);
+
     return StunMessage {
         stun_header: StunHeader::new(
             BINDING_RESPONSE,
-            BODY_LENGTH,
+            body_len,
             stun_message[8..20].try_into().unwrap(),
         ),
-        stun_body: StunBody {
-            attributes: vec![
-                Box::new(AttributeEnum::XorMappedAddress({
-                    XorMappedAddress::new(address, stun_message[8..20].try_into().unwrap())
-                })) as Box<dyn Attribute + Send>,
-                Box::new(AttributeEnum::MappedAddress({
-                    MappedAddress::new(address)
-                })) as Box<dyn Attribute + Send>,
-            ],
-        },
+        stun_body,
     };
 }
 

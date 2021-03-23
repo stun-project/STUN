@@ -198,11 +198,11 @@ async fn handle_udp_connection(
     message_len: usize,
     address: SocketAddr,
 ) -> Result<Vec<u8>, Box<dyn Error>> {
-    println!("{:?}", &buffer[..message_len]);
+    println!("Request: {:?}", &buffer[..message_len]);
     let message = handle_message(&buffer[..message_len], address); //parse address, ta imot address
-    let buffer = message.serialize();
-
-    Ok(buffer)
+    let response = message.serialize();
+    println!("Response: {:?}", &response);
+    Ok(response)
 }
 
 pub fn parse_program_arguments(input: Vec<String>) -> (SocketAddr, StunServerEnum) {

@@ -13,9 +13,9 @@ impl StunHeader {
     pub fn serialize(&self) -> Vec<u8> {
         let mut stun_header: Vec<u8> = vec![0 as u8; 8];
 
-        BigEndian::write_u16(&mut stun_header, self.type_);
-        BigEndian::write_u16(&mut stun_header, self.length);
-        BigEndian::write_u32(&mut stun_header, MAGIC_COOKIE);
+        BigEndian::write_u16(&mut stun_header[0..2], self.type_);
+        BigEndian::write_u16(&mut stun_header[2..4], self.length);
+        BigEndian::write_u32(&mut stun_header[4..8], MAGIC_COOKIE);
         stun_header.append(&mut self.transaction_id.to_vec());
 
         return stun_header;
