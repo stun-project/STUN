@@ -4,7 +4,7 @@ use async_trait::async_trait;
 use std::error::Error;
 use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 use std::str::FromStr;
-use tokio::io::{AsyncReadExt,AsyncWriteExt};
+use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::{TcpListener, TcpStream, UdpSocket};
 
 #[async_trait]
@@ -54,12 +54,8 @@ impl StunServer for UdpStunServer {
                 udp_message = self.udp_socket.recv_from(&mut buffer) => {
                     match udp_message {
                         Ok(message) => {
-                            tokio::spawn(async move {
-                                println!("Accepted connection from {}, received {} bytes", &message.1, &message.0);
-                                if let Err(e) = handle_udp_connection(&buffer, message.0, message.1).await {
-                                    println!("an error occurred; error = {:?}", e);
-                                }
-                            });
+                            let response = handle_udp_connection(&mut buffer, message.0, message.1 ).await?;
+                            self.udp_socket.send(&response).await?;
                         },
                         Err(e) => println!("{:?}", e),
                     }
@@ -84,19 +80,15 @@ impl StunServer for MultiplexedStunServer {
                 udp_message = self.udp_socket.recv_from(&mut buffer) => {
                     match udp_message {
                         Ok(message) => {
-                            tokio::spawn(async move {
-                                println!("Accepted connection from {}, received {} bytes", &message.1, &message.0);
-                                if let Err(e) = handle_udp_connection(&buffer, message.0, message.1).await {
-                                    println!("an error occurred; error = {:?}", e);
-                                }
-                            });
+                            let response = handle_udp_connection(&mut buffer, message.0, message.1 ).await?;
+                            self.udp_socket.send(&response).await?;
                         },
                         Err(e) => println!("{:?}", e),
                     }
-                }
+                },
                 tcp_stream = self.tcp_socket.accept() => {
                     match tcp_stream {
-                        Ok(stream) => {
+                        Ok(mut stream) => {
                             tokio::spawn(async move {
                                 println!("Accepted connection from {}", &stream.1);
                                 if let Err(e) = handle_tcp_connection(stream.0).await {
@@ -182,14 +174,22 @@ async fn handle_tcp_connection(mut stream: TcpStream) -> Result<(), Box<dyn Erro
     stream.readable().await?;
     let length = stream.read(&mut buffer).await?;
     println!("{}", String::from_utf8_lossy(&buffer[..length]));
-    match stream.peer_addr() {
-        Ok(socket_addr) => {
-            //stream.write(&handle_message(&buffer, socket_addr).serialize()[..]).await?; //skal det være: ?
-            handle_message(&buffer, socket_addr);
-        }
-        Err(e) => panic!(e),
-    };
-    
+
+    let message = handle_message(&buffer, stream.peer_addr().unwrap());
+
+    let serialized_stun_message = message.serialize();
+
+    stream.writable().await?;
+    stream.write_all(&serialized_stun_message).await?;
+
+    // match stream.peer_addr() {
+    //     Ok(socket_addr) => {
+    //          //skal det være: ?
+    //         stream.flush().await?;
+    //     }
+    //     Err(e) => panic!(e),
+    // };
+
     Ok(())
 }
 
@@ -197,10 +197,14 @@ async fn handle_udp_connection(
     buffer: &[u8; 1024],
     message_len: usize,
     address: SocketAddr,
-) -> Result<(), Box<dyn Error>> {
+) -> Result<Vec<u8>, Box<dyn Error>> {
     println!("{:?}", &buffer[..message_len]);
     let _message = handle_message(&buffer[..message_len], address); //pase address, ta imot address
-    Ok(())
+    let message = handle_message(buffer, address);
+
+    let buffer = message.serialize();
+
+    Ok(buffer)
 }
 
 pub fn parse_program_arguments(input: Vec<String>) -> (SocketAddr, StunServerEnum) {

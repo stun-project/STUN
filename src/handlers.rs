@@ -1,8 +1,8 @@
-use crate::attributes::{AttributeEnum, XorMappedAddress, ErrorCode, MappedAddress};
-use std::net::SocketAddr;
+use crate::attributes::{Attribute, AttributeEnum, ErrorCode, MappedAddress, XorMappedAddress};
 use crate::errors::ErrorCodeEnum;
 use crate::message::{StunBody, StunHeader, StunMessage, MAGIC_COOKIE};
 use byteorder::{BigEndian, ByteOrder};
+use std::net::SocketAddr;
 pub const BINDING_REQUEST: u16 = 0x0001;
 pub const BINDING_RESPONSE: u16 = 0x0101;
 pub const BINDING_ERROR_RESPONSE: u16 = 0x0111;
@@ -21,7 +21,7 @@ use std::convert::TryInto;
 
 const BODY_LENGTH: u16 = 6;
 
-pub fn handle_message(stun_message: &[u8],address: SocketAddr) -> StunMessage {
+pub fn handle_message(stun_message: &[u8], address: SocketAddr) -> StunMessage {
     //let mut response: Vec<u8> = Vec::new();
     if !check_validity(&stun_message) {
         return StunMessage {
@@ -36,7 +36,7 @@ pub fn handle_message(stun_message: &[u8],address: SocketAddr) -> StunMessage {
                         ErrorCodeEnum::BadRequest as u32,
                         ErrorCodeEnum::reason_phrase(&ErrorCodeEnum::BadRequest).to_string(),
                     )
-                }))],
+                })) as Box<dyn Attribute + Send>],
             },
         };
     }
@@ -49,12 +49,11 @@ pub fn handle_message(stun_message: &[u8],address: SocketAddr) -> StunMessage {
         stun_body: StunBody {
             attributes: vec![
                 Box::new(AttributeEnum::XorMappedAddress({
-                XorMappedAddress::new(address,stun_message[8..20].try_into().unwrap())
-            })),
+                    XorMappedAddress::new(address, stun_message[8..20].try_into().unwrap())
+                })) as Box<dyn Attribute + Send>,
                 Box::new(AttributeEnum::MappedAddress({
                     MappedAddress::new(address)
-                }))
-            
+                })) as Box<dyn Attribute + Send>,
             ],
         },
     };
