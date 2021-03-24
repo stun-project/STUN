@@ -1,0 +1,366 @@
+2021-03-24T17:14:05.0826304Z ##[section]Starting: Request a runner to run this job
+2021-03-24T17:14:05.4586943Z Can't find any online and idle self-hosted runner in current repository that matches the required labels: 'ubuntu-latest'
+2021-03-24T17:14:05.4587039Z Can't find any online and idle self-hosted runner in current repository's account/organization that matches the required labels: 'ubuntu-latest'
+2021-03-24T17:14:05.4587452Z Found online and idle hosted runner in current repository's account/organization that matches the required labels: 'ubuntu-latest'
+2021-03-24T17:14:05.7794116Z ##[section]Finishing: Request a runner to run this job
+2021-03-24T17:14:14.5475238Z Current runner version: '2.277.1'
+2021-03-24T17:14:14.5503197Z ##[group]Operating System
+2021-03-24T17:14:14.5504238Z Ubuntu
+2021-03-24T17:14:14.5504712Z 20.04.2
+2021-03-24T17:14:14.5505126Z LTS
+2021-03-24T17:14:14.5505592Z ##[endgroup]
+2021-03-24T17:14:14.5506084Z ##[group]Virtual Environment
+2021-03-24T17:14:14.5506877Z Environment: ubuntu-20.04
+2021-03-24T17:14:14.5507358Z Version: 20210318.0
+2021-03-24T17:14:14.5508246Z Included Software: https://github.com/actions/virtual-environments/blob/ubuntu20/20210318.0/images/linux/Ubuntu2004-README.md
+2021-03-24T17:14:14.5509542Z Image Release: https://github.com/actions/virtual-environments/releases/tag/ubuntu20%2F20210318.0
+2021-03-24T17:14:14.5510316Z ##[endgroup]
+2021-03-24T17:14:14.5512669Z ##[group]GITHUB_TOKEN Permissions
+2021-03-24T17:14:14.5514265Z Actions: write
+2021-03-24T17:14:14.5514757Z Checks: write
+2021-03-24T17:14:14.5515202Z Contents: write
+2021-03-24T17:14:14.5515715Z Deployments: write
+2021-03-24T17:14:14.5516313Z Issues: write
+2021-03-24T17:14:14.5516821Z Metadata: read
+2021-03-24T17:14:14.5517752Z OrganizationPackages: write
+2021-03-24T17:14:14.5518349Z Packages: write
+2021-03-24T17:14:14.5518835Z PullRequests: write
+2021-03-24T17:14:14.5519388Z RepositoryProjects: write
+2021-03-24T17:14:14.5519999Z SecurityEvents: write
+2021-03-24T17:14:14.5520482Z Statuses: write
+2021-03-24T17:14:14.5521110Z ##[endgroup]
+2021-03-24T17:14:14.5524016Z Prepare workflow directory
+2021-03-24T17:14:14.6360440Z Prepare all required actions
+2021-03-24T17:14:14.6373154Z Getting action download info
+2021-03-24T17:14:15.0287965Z Download action repository 'actions/checkout@v2'
+2021-03-24T17:14:17.0218495Z ##[group]Run actions/checkout@v2
+2021-03-24T17:14:17.0219131Z with:
+2021-03-24T17:14:17.0219618Z   repository: stun-project/STUN
+2021-03-24T17:14:17.0220348Z   token: ***
+2021-03-24T17:14:17.0220776Z   ssh-strict: true
+2021-03-24T17:14:17.0221234Z   persist-credentials: true
+2021-03-24T17:14:17.0221704Z   clean: true
+2021-03-24T17:14:17.0222120Z   fetch-depth: 1
+2021-03-24T17:14:17.0222545Z   lfs: false
+2021-03-24T17:14:17.0223142Z   submodules: false
+2021-03-24T17:14:17.0223887Z env:
+2021-03-24T17:14:17.0224551Z   CARGO_TERM_COLOR: always
+2021-03-24T17:14:17.0225256Z ##[endgroup]
+2021-03-24T17:14:17.6436981Z Syncing repository: stun-project/STUN
+2021-03-24T17:14:17.6451874Z ##[group]Getting Git version info
+2021-03-24T17:14:17.6454324Z Working directory is '/home/runner/work/STUN/STUN'
+2021-03-24T17:14:17.6455403Z [command]/usr/bin/git version
+2021-03-24T17:14:17.6455945Z git version 2.31.0
+2021-03-24T17:14:17.6457891Z ##[endgroup]
+2021-03-24T17:14:17.6459022Z Deleting the contents of '/home/runner/work/STUN/STUN'
+2021-03-24T17:14:17.6460622Z ##[group]Initializing the repository
+2021-03-24T17:14:17.6461465Z [command]/usr/bin/git init /home/runner/work/STUN/STUN
+2021-03-24T17:14:17.6462660Z hint: Using 'master' as the name for the initial branch. This default branch name
+2021-03-24T17:14:17.6463687Z hint: is subject to change. To configure the initial branch name to use in all
+2021-03-24T17:14:17.6464727Z hint: of your new repositories, which will suppress this warning, call:
+2021-03-24T17:14:17.6466033Z hint: 
+2021-03-24T17:14:17.6495714Z hint: 	git config --global init.defaultBranch <name>
+2021-03-24T17:14:17.6583384Z hint: 
+2021-03-24T17:14:17.6599965Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2021-03-24T17:14:17.6601911Z hint: 'development'. The just-created branch can be renamed via this command:
+2021-03-24T17:14:17.6602873Z hint: 
+2021-03-24T17:14:17.6604701Z hint: 	git branch -m <name>
+2021-03-24T17:14:17.6605985Z Initialized empty Git repository in /home/runner/work/STUN/STUN/.git/
+2021-03-24T17:14:17.6607348Z [command]/usr/bin/git remote add origin https://github.com/stun-project/STUN
+2021-03-24T17:14:17.6608536Z ##[endgroup]
+2021-03-24T17:14:17.6609499Z ##[group]Disabling automatic garbage collection
+2021-03-24T17:14:17.6611199Z [command]/usr/bin/git config --local gc.auto 0
+2021-03-24T17:14:17.6612036Z ##[endgroup]
+2021-03-24T17:14:17.6614617Z ##[group]Setting up auth
+2021-03-24T17:14:17.6615895Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2021-03-24T17:14:17.6617774Z [command]/usr/bin/git submodule foreach --recursive git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :
+2021-03-24T17:14:17.6619540Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2021-03-24T17:14:17.6621508Z [command]/usr/bin/git submodule foreach --recursive git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :
+2021-03-24T17:14:17.6623581Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2021-03-24T17:14:17.6624816Z ##[endgroup]
+2021-03-24T17:14:17.6625828Z ##[group]Fetching the repository
+2021-03-24T17:14:17.6628668Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --progress --no-recurse-submodules --depth=1 origin +9990310e82e2e79a0eddad45910fd621673451da:refs/remotes/pull/9/merge
+2021-03-24T17:14:18.4806913Z remote: Enumerating objects: 25, done.        
+2021-03-24T17:14:18.4807964Z remote: Counting objects:   4% (1/25)        
+2021-03-24T17:14:18.4808624Z remote: Counting objects:   8% (2/25)        
+2021-03-24T17:14:18.4809305Z remote: Counting objects:  12% (3/25)        
+2021-03-24T17:14:18.4810108Z remote: Counting objects:  16% (4/25)        
+2021-03-24T17:14:18.4810820Z remote: Counting objects:  20% (5/25)        
+2021-03-24T17:14:18.4811610Z remote: Counting objects:  24% (6/25)        
+2021-03-24T17:14:18.4812527Z remote: Counting objects:  28% (7/25)        
+2021-03-24T17:14:18.4813315Z remote: Counting objects:  32% (8/25)        
+2021-03-24T17:14:18.4814224Z remote: Counting objects:  36% (9/25)        
+2021-03-24T17:14:18.4814880Z remote: Counting objects:  40% (10/25)        
+2021-03-24T17:14:18.4815560Z remote: Counting objects:  44% (11/25)        
+2021-03-24T17:14:18.4816232Z remote: Counting objects:  48% (12/25)        
+2021-03-24T17:14:18.4818102Z remote: Counting objects:  52% (13/25)        
+2021-03-24T17:14:18.4818971Z remote: Counting objects:  56% (14/25)        
+2021-03-24T17:14:18.4819893Z remote: Counting objects:  60% (15/25)        
+2021-03-24T17:14:18.4821072Z remote: Counting objects:  64% (16/25)        
+2021-03-24T17:14:18.4822101Z remote: Counting objects:  68% (17/25)        
+2021-03-24T17:14:18.4822873Z remote: Counting objects:  72% (18/25)        
+2021-03-24T17:14:18.4824162Z remote: Counting objects:  76% (19/25)        
+2021-03-24T17:14:18.4824885Z remote: Counting objects:  80% (20/25)        
+2021-03-24T17:14:18.4825606Z remote: Counting objects:  84% (21/25)        
+2021-03-24T17:14:18.4826273Z remote: Counting objects:  88% (22/25)        
+2021-03-24T17:14:18.4826992Z remote: Counting objects:  92% (23/25)        
+2021-03-24T17:14:18.4828312Z remote: Counting objects:  96% (24/25)        
+2021-03-24T17:14:18.4828983Z remote: Counting objects: 100% (25/25)        
+2021-03-24T17:14:18.4853345Z remote: Counting objects: 100% (25/25), done.        
+2021-03-24T17:14:18.4854747Z remote: Compressing objects:   4% (1/21)        
+2021-03-24T17:14:18.4855742Z remote: Compressing objects:   9% (2/21)        
+2021-03-24T17:14:18.4856625Z remote: Compressing objects:  14% (3/21)        
+2021-03-24T17:14:18.4857584Z remote: Compressing objects:  19% (4/21)        
+2021-03-24T17:14:18.4859029Z remote: Compressing objects:  23% (5/21)        
+2021-03-24T17:14:18.4859687Z remote: Compressing objects:  28% (6/21)        
+2021-03-24T17:14:18.4860458Z remote: Compressing objects:  33% (7/21)        
+2021-03-24T17:14:18.4861148Z remote: Compressing objects:  38% (8/21)        
+2021-03-24T17:14:18.4861865Z remote: Compressing objects:  42% (9/21)        
+2021-03-24T17:14:18.4862707Z remote: Compressing objects:  47% (10/21)        
+2021-03-24T17:14:18.4863864Z remote: Compressing objects:  52% (11/21)        
+2021-03-24T17:14:18.4865190Z remote: Compressing objects:  57% (12/21)        
+2021-03-24T17:14:18.4866489Z remote: Compressing objects:  61% (13/21)        
+2021-03-24T17:14:18.4867898Z remote: Compressing objects:  66% (14/21)        
+2021-03-24T17:14:18.4869117Z remote: Compressing objects:  71% (15/21)        
+2021-03-24T17:14:18.4870154Z remote: Compressing objects:  76% (16/21)        
+2021-03-24T17:14:18.4872111Z remote: Compressing objects:  80% (17/21)        
+2021-03-24T17:14:18.4873272Z remote: Compressing objects:  85% (18/21)        
+2021-03-24T17:14:18.4874616Z remote: Compressing objects:  90% (19/21)        
+2021-03-24T17:14:18.4875417Z remote: Compressing objects:  95% (20/21)        
+2021-03-24T17:14:18.4876260Z remote: Compressing objects: 100% (21/21)        
+2021-03-24T17:14:18.4877376Z remote: Compressing objects: 100% (21/21), done.        
+2021-03-24T17:14:18.4879181Z remote: Total 25 (delta 0), reused 12 (delta 0), pack-reused 0        
+2021-03-24T17:14:18.4880561Z From https://github.com/stun-project/STUN
+2021-03-24T17:14:18.4881747Z  * [new ref]         9990310e82e2e79a0eddad45910fd621673451da -> pull/9/merge
+2021-03-24T17:14:18.4882658Z ##[endgroup]
+2021-03-24T17:14:18.4883334Z ##[group]Determining the checkout info
+2021-03-24T17:14:18.4884241Z ##[endgroup]
+2021-03-24T17:14:18.4884868Z ##[group]Checking out the ref
+2021-03-24T17:14:18.4885989Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/9/merge
+2021-03-24T17:14:18.4887430Z Note: switching to 'refs/remotes/pull/9/merge'.
+2021-03-24T17:14:18.4887965Z 
+2021-03-24T17:14:18.4888866Z You are in 'detached HEAD' state. You can look around, make experimental
+2021-03-24T17:14:18.4889688Z changes and commit them, and you can discard any commits you make in this
+2021-03-24T17:14:18.4890373Z state without impacting any branches by switching back to a branch.
+2021-03-24T17:14:18.4890778Z 
+2021-03-24T17:14:18.4891306Z If you want to create a new branch to retain commits you create, you may
+2021-03-24T17:14:18.4892378Z do so (now or later) by using -c with the switch command. Example:
+2021-03-24T17:14:18.4892938Z 
+2021-03-24T17:14:18.4894136Z   git switch -c <new-branch-name>
+2021-03-24T17:14:18.5053357Z 
+2021-03-24T17:14:18.5090863Z Or undo this operation with:
+2021-03-24T17:14:18.5091147Z 
+2021-03-24T17:14:18.5091818Z   git switch -
+2021-03-24T17:14:18.5092050Z 
+2021-03-24T17:14:18.5092560Z Turn off this advice by setting config variable advice.detachedHead to false
+2021-03-24T17:14:18.5092978Z 
+2021-03-24T17:14:18.5094112Z HEAD is now at 9990310 Merge edce95f146e3a728994d22a097bed1fe0ae61e55 into 8b8f7c7c27b2ab4cc64d7816ba9d698d655623ca
+2021-03-24T17:14:18.5095015Z ##[endgroup]
+2021-03-24T17:14:18.5095657Z [command]/usr/bin/git log -1 --format='%H'
+2021-03-24T17:14:18.5096364Z '9990310e82e2e79a0eddad45910fd621673451da'
+2021-03-24T17:14:18.5164469Z ##[group]Run cargo build --verbose
+2021-03-24T17:14:18.5165041Z [36;1mcargo build --verbose[0m
+2021-03-24T17:14:18.5205349Z shell: /usr/bin/bash -e {0}
+2021-03-24T17:14:18.5205723Z env:
+2021-03-24T17:14:18.5206104Z   CARGO_TERM_COLOR: always
+2021-03-24T17:14:18.5206486Z ##[endgroup]
+2021-03-24T17:14:25.4777244Z [0m[0m[1m[32m    Updating[0m crates.io index
+2021-03-24T17:15:15.6777502Z [0m[0m[1m[32m Downloading[0m crates ...
+2021-03-24T17:15:15.8115096Z [0m[0m[1m[32m  Downloaded[0m cfg-if v1.0.0
+2021-03-24T17:15:15.8201344Z [0m[0m[1m[32m  Downloaded[0m log v0.4.14
+2021-03-24T17:15:15.8234086Z [0m[0m[1m[32m  Downloaded[0m once_cell v1.7.2
+2021-03-24T17:15:15.8272030Z [0m[0m[1m[32m  Downloaded[0m smallvec v1.6.1
+2021-03-24T17:15:15.8301074Z [0m[0m[1m[32m  Downloaded[0m pin-project-lite v0.2.6
+2021-03-24T17:15:15.8362070Z [0m[0m[1m[32m  Downloaded[0m syn v1.0.64
+2021-03-24T17:15:15.8504642Z [0m[0m[1m[32m  Downloaded[0m parking_lot_core v0.8.3
+2021-03-24T17:15:15.8526919Z [0m[0m[1m[32m  Downloaded[0m proc-macro2 v1.0.24
+2021-03-24T17:15:15.8552032Z [0m[0m[1m[32m  Downloaded[0m unicode-xid v0.2.1
+2021-03-24T17:15:15.8573446Z [0m[0m[1m[32m  Downloaded[0m tokio-macros v1.1.0
+2021-03-24T17:15:15.8595454Z [0m[0m[1m[32m  Downloaded[0m tokio v1.4.0
+2021-03-24T17:15:15.8939893Z [0m[0m[1m[32m  Downloaded[0m libc v0.2.91
+2021-03-24T17:15:15.9214094Z [0m[0m[1m[32m  Downloaded[0m async-trait v0.1.48
+2021-03-24T17:15:15.9249983Z [0m[0m[1m[32m  Downloaded[0m bytes v1.0.1
+2021-03-24T17:15:15.9294855Z [0m[0m[1m[32m  Downloaded[0m parking_lot v0.11.1
+2021-03-24T17:15:15.9333387Z [0m[0m[1m[32m  Downloaded[0m byteorder v1.4.3
+2021-03-24T17:15:15.9392728Z [0m[0m[1m[32m  Downloaded[0m mio v0.7.11
+2021-03-24T17:15:15.9410486Z [0m[0m[1m[32m  Downloaded[0m signal-hook-registry v1.3.0
+2021-03-24T17:15:15.9423002Z [0m[0m[1m[32m  Downloaded[0m scopeguard v1.1.0
+2021-03-24T17:15:15.9436657Z [0m[0m[1m[32m  Downloaded[0m quote v1.0.9
+2021-03-24T17:15:15.9463743Z [0m[0m[1m[32m  Downloaded[0m num_cpus v1.13.0
+2021-03-24T17:15:15.9492141Z [0m[0m[1m[32m  Downloaded[0m memchr v2.3.4
+2021-03-24T17:15:15.9522996Z [0m[0m[1m[32m  Downloaded[0m lock_api v0.4.2
+2021-03-24T17:15:15.9538247Z [0m[0m[1m[32m  Downloaded[0m instant v0.1.9
+2021-03-24T17:15:15.9582089Z [0m[0m[1m[32m  Downloaded[0m autocfg v1.0.1
+2021-03-24T17:15:15.9711855Z [0m[0m[1m[32m   Compiling[0m libc v0.2.91
+2021-03-24T17:15:15.9771513Z [0m[0m[1m[32m   Compiling[0m proc-macro2 v1.0.24
+2021-03-24T17:15:15.9785414Z [0m[0m[1m[32m     Running[0m `rustc --crate-name build_script_build /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/libc-0.2.91/build.rs --error-format=json --json=diagnostic-rendered-ansi --crate-type bin --emit=dep-info,link -C embed-bitcode=no -C debuginfo=2 --cfg 'feature="default"' --cfg 'feature="std"' -C metadata=77c9e478007f73ef -C extra-filename=-77c9e478007f73ef --out-dir /home/runner/work/STUN/STUN/target/debug/build/libc-77c9e478007f73ef -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --cap-lints allow`
+2021-03-24T17:15:15.9791498Z [0m[0m[1m[32m     Running[0m `rustc --crate-name build_script_build --edition=2018 /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.24/build.rs --error-format=json --json=diagnostic-rendered-ansi --crate-type bin --emit=dep-info,link -C embed-bitcode=no -C debuginfo=2 --cfg 'feature="default"' --cfg 'feature="proc-macro"' -C metadata=7b3628c504c44eb9 -C extra-filename=-7b3628c504c44eb9 --out-dir /home/runner/work/STUN/STUN/target/debug/build/proc-macro2-7b3628c504c44eb9 -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --cap-lints allow`
+2021-03-24T17:15:26.1600823Z [0m[0m[1m[32m   Compiling[0m cfg-if v1.0.0
+2021-03-24T17:15:26.1604673Z [0m[0m[1m[32m     Running[0m `rustc --crate-name cfg_if --edition=2018 /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/cfg-if-1.0.0/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 -C metadata=5027c5fda945db67 -C extra-filename=-5027c5fda945db67 --out-dir /home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --cap-lints allow`
+2021-03-24T17:15:26.1622258Z [0m[0m[1m[32m   Compiling[0m unicode-xid v0.2.1
+2021-03-24T17:15:26.1634451Z [0m[0m[1m[32m     Running[0m `rustc --crate-name unicode_xid /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-xid-0.2.1/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 --cfg 'feature="default"' -C metadata=373664510327a5cc -C extra-filename=-373664510327a5cc --out-dir /home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --cap-lints allow`
+2021-03-24T17:15:26.3473468Z [0m[0m[1m[32m   Compiling[0m syn v1.0.64
+2021-03-24T17:15:26.3477422Z [0m[0m[1m[32m     Running[0m `rustc --crate-name build_script_build --edition=2018 /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/syn-1.0.64/build.rs --error-format=json --json=diagnostic-rendered-ansi --crate-type bin --emit=dep-info,link -C embed-bitcode=no -C debuginfo=2 --cfg 'feature="clone-impls"' --cfg 'feature="default"' --cfg 'feature="derive"' --cfg 'feature="full"' --cfg 'feature="parsing"' --cfg 'feature="printing"' --cfg 'feature="proc-macro"' --cfg 'feature="quote"' --cfg 'feature="visit-mut"' -C metadata=2651a5434aacb242 -C extra-filename=-2651a5434aacb242 --out-dir /home/runner/work/STUN/STUN/target/debug/build/syn-2651a5434aacb242 -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --cap-lints allow`
+2021-03-24T17:15:26.4234133Z [0m[0m[1m[32m   Compiling[0m log v0.4.14
+2021-03-24T17:15:26.4237430Z [0m[0m[1m[32m     Running[0m `rustc --crate-name build_script_build /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/log-0.4.14/build.rs --error-format=json --json=diagnostic-rendered-ansi --crate-type bin --emit=dep-info,link -C embed-bitcode=no -C debuginfo=2 -C metadata=2ec0c07fe94e1d4e -C extra-filename=-2ec0c07fe94e1d4e --out-dir /home/runner/work/STUN/STUN/target/debug/build/log-2ec0c07fe94e1d4e -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --cap-lints allow`
+2021-03-24T17:15:26.8666213Z [0m[0m[1m[32m   Compiling[0m autocfg v1.0.1
+2021-03-24T17:15:26.8669964Z [0m[0m[1m[32m     Running[0m `rustc --crate-name autocfg /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/autocfg-1.0.1/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 -C metadata=f2f3f9497068628e -C extra-filename=-f2f3f9497068628e --out-dir /home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --cap-lints allow`
+2021-03-24T17:15:26.9840619Z [0m[0m[1m[32m   Compiling[0m smallvec v1.6.1
+2021-03-24T17:15:26.9845617Z [0m[0m[1m[32m     Running[0m `rustc --crate-name smallvec --edition=2018 /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/smallvec-1.6.1/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 -C metadata=e310e2c157142037 -C extra-filename=-e310e2c157142037 --out-dir /home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --cap-lints allow`
+2021-03-24T17:15:27.5214893Z [0m[0m[1m[32m   Compiling[0m memchr v2.3.4
+2021-03-24T17:15:27.5220610Z [0m[0m[1m[32m     Running[0m `rustc --crate-name build_script_build /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/memchr-2.3.4/build.rs --error-format=json --json=diagnostic-rendered-ansi --crate-type bin --emit=dep-info,link -C embed-bitcode=no -C debuginfo=2 --cfg 'feature="default"' --cfg 'feature="std"' -C metadata=d738dde9887d8812 -C extra-filename=-d738dde9887d8812 --out-dir /home/runner/work/STUN/STUN/target/debug/build/memchr-d738dde9887d8812 -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --cap-lints allow`
+2021-03-24T17:15:27.7867815Z [0m[0m[1m[32m   Compiling[0m scopeguard v1.1.0
+2021-03-24T17:15:27.7873580Z [0m[0m[1m[32m     Running[0m `rustc --crate-name scopeguard /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/scopeguard-1.1.0/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 -C metadata=4eb98674ce111148 -C extra-filename=-4eb98674ce111148 --out-dir /home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --cap-lints allow`
+2021-03-24T17:15:27.9480438Z [0m[0m[1m[32m   Compiling[0m async-trait v0.1.48
+2021-03-24T17:15:27.9484504Z [0m[0m[1m[32m     Running[0m `rustc --crate-name build_script_build --edition=2018 /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.48/build.rs --error-format=json --json=diagnostic-rendered-ansi --crate-type bin --emit=dep-info,link -C embed-bitcode=no -C debuginfo=2 -C metadata=492dc00e03e826ee -C extra-filename=-492dc00e03e826ee --out-dir /home/runner/work/STUN/STUN/target/debug/build/async-trait-492dc00e03e826ee -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --cap-lints allow`
+2021-03-24T17:15:28.0430366Z [0m[0m[1m[32m   Compiling[0m bytes v1.0.1
+2021-03-24T17:15:28.0435796Z [0m[0m[1m[32m     Running[0m `rustc --crate-name bytes --edition=2018 /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/bytes-1.0.1/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 --cfg 'feature="default"' --cfg 'feature="std"' -C metadata=dbb60275a9c48d19 -C extra-filename=-dbb60275a9c48d19 --out-dir /home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --cap-lints allow`
+2021-03-24T17:15:28.4511121Z [0m[0m[1m[32m   Compiling[0m pin-project-lite v0.2.6
+2021-03-24T17:15:28.4515106Z [0m[0m[1m[32m     Running[0m `rustc --crate-name pin_project_lite --edition=2018 /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/pin-project-lite-0.2.6/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 -C metadata=1090cf562b4a2ee8 -C extra-filename=-1090cf562b4a2ee8 --out-dir /home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --cap-lints allow`
+2021-03-24T17:15:28.6667213Z [0m[0m[1m[32m   Compiling[0m once_cell v1.7.2
+2021-03-24T17:15:28.6671551Z [0m[0m[1m[32m     Running[0m `rustc --crate-name once_cell --edition=2018 /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/once_cell-1.7.2/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 --cfg 'feature="alloc"' --cfg 'feature="default"' --cfg 'feature="race"' --cfg 'feature="std"' -C metadata=5f95ba31ee256d5f -C extra-filename=-5f95ba31ee256d5f --out-dir /home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --cap-lints allow`
+2021-03-24T17:15:29.0160960Z [0m[0m[1m[32m   Compiling[0m byteorder v1.4.3
+2021-03-24T17:15:29.0166084Z [0m[0m[1m[32m     Running[0m `rustc --crate-name byteorder --edition=2018 /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/byteorder-1.4.3/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 --cfg 'feature="default"' --cfg 'feature="std"' -C metadata=20af568bf8d71702 -C extra-filename=-20af568bf8d71702 --out-dir /home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --cap-lints allow`
+2021-03-24T17:15:29.3907265Z [0m[0m[1m[32m     Running[0m `/home/runner/work/STUN/STUN/target/debug/build/libc-77c9e478007f73ef/build-script-build`
+2021-03-24T17:15:29.4920432Z [0m[0m[1m[32m     Running[0m `/home/runner/work/STUN/STUN/target/debug/build/proc-macro2-7b3628c504c44eb9/build-script-build`
+2021-03-24T17:15:29.5763319Z [0m[0m[1m[32m   Compiling[0m instant v0.1.9
+2021-03-24T17:15:29.5774037Z [0m[0m[1m[32m     Running[0m `rustc --crate-name instant --edition=2018 /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/instant-0.1.9/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 -C metadata=a66b52fcbf3b13e3 -C extra-filename=-a66b52fcbf3b13e3 --out-dir /home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --extern cfg_if=/home/runner/work/STUN/STUN/target/debug/deps/libcfg_if-5027c5fda945db67.rmeta --cap-lints allow`
+2021-03-24T17:15:29.5918927Z [0m[0m[1m[32m     Running[0m `/home/runner/work/STUN/STUN/target/debug/build/log-2ec0c07fe94e1d4e/build-script-build`
+2021-03-24T17:15:29.5950100Z [0m[0m[1m[32m     Running[0m `/home/runner/work/STUN/STUN/target/debug/build/syn-2651a5434aacb242/build-script-build`
+2021-03-24T17:15:29.7016857Z [0m[0m[1m[32m   Compiling[0m tokio v1.4.0
+2021-03-24T17:15:29.7026860Z [0m[0m[1m[32m     Running[0m `rustc --crate-name build_script_build --edition=2018 /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-1.4.0/build.rs --error-format=json --json=diagnostic-rendered-ansi --crate-type bin --emit=dep-info,link -C embed-bitcode=no -C debuginfo=2 --cfg 'feature="bytes"' --cfg 'feature="default"' --cfg 'feature="fs"' --cfg 'feature="full"' --cfg 'feature="io-std"' --cfg 'feature="io-util"' --cfg 'feature="libc"' --cfg 'feature="macros"' --cfg 'feature="memchr"' --cfg 'feature="mio"' --cfg 'feature="net"' --cfg 'feature="num_cpus"' --cfg 'feature="once_cell"' --cfg 'feature="parking_lot"' --cfg 'feature="process"' --cfg 'feature="rt"' --cfg 'feature="rt-multi-thread"' --cfg 'feature="signal"' --cfg 'feature="signal-hook-registry"' --cfg 'feature="sync"' --cfg 'feature="time"' --cfg 'feature="tokio-macros"' --cfg 'feature="tracing"' --cfg 'feature="winapi"' -C metadata=1b3a30dacd0b9eb1 -C extra-filename=-1b3a30dacd0b9eb1 --out-dir /home/runner/work/STUN/STUN/target/debug/build/tokio-1b3a30dacd0b9eb1 -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --extern autocfg=/home/runner/work/STUN/STUN/target/debug/deps/libautocfg-f2f3f9497068628e.rlib --cap-lints allow`
+2021-03-24T17:15:29.7087347Z [0m[0m[1m[32m     Running[0m `/home/runner/work/STUN/STUN/target/debug/build/memchr-d738dde9887d8812/build-script-build`
+2021-03-24T17:15:29.7112445Z [0m[0m[1m[32m   Compiling[0m lock_api v0.4.2
+2021-03-24T17:15:29.7118279Z [0m[0m[1m[32m     Running[0m `rustc --crate-name lock_api --edition=2018 /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/lock_api-0.4.2/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 -C metadata=c5b0a39665108282 -C extra-filename=-c5b0a39665108282 --out-dir /home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --extern scopeguard=/home/runner/work/STUN/STUN/target/debug/deps/libscopeguard-4eb98674ce111148.rmeta --cap-lints allow`
+2021-03-24T17:15:30.0719080Z [0m[0m[1m[32m     Running[0m `/home/runner/work/STUN/STUN/target/debug/build/async-trait-492dc00e03e826ee/build-script-build`
+2021-03-24T17:15:30.0930051Z [0m[0m[1m[32m     Running[0m `rustc --crate-name libc /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/libc-0.2.91/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 --cfg 'feature="default"' --cfg 'feature="std"' -C metadata=966c63ed43d1d2bd -C extra-filename=-966c63ed43d1d2bd --out-dir /home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --cap-lints allow --cfg freebsd11 --cfg libc_priv_mod_use --cfg libc_union --cfg libc_const_size_of --cfg libc_align --cfg libc_core_cvoid --cfg libc_packedN --cfg libc_cfg_target_vendor`
+2021-03-24T17:15:30.2027179Z [0m[0m[1m[32m     Running[0m `rustc --crate-name proc_macro2 --edition=2018 /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/proc-macro2-1.0.24/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 --cfg 'feature="default"' --cfg 'feature="proc-macro"' -C metadata=4431be3eb037870a -C extra-filename=-4431be3eb037870a --out-dir /home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --extern unicode_xid=/home/runner/work/STUN/STUN/target/debug/deps/libunicode_xid-373664510327a5cc.rmeta --cap-lints allow --cfg lexerror_display --cfg hygiene --cfg use_proc_macro --cfg wrap_proc_macro`
+2021-03-24T17:15:31.0776084Z [0m[0m[1m[32m     Running[0m `rustc --crate-name log /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/log-0.4.14/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 -C metadata=5e7e7282d7290040 -C extra-filename=-5e7e7282d7290040 --out-dir /home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --extern cfg_if=/home/runner/work/STUN/STUN/target/debug/deps/libcfg_if-5027c5fda945db67.rmeta --cap-lints allow --cfg atomic_cas --cfg has_atomics`
+2021-03-24T17:15:31.8074061Z [0m[0m[1m[32m     Running[0m `rustc --crate-name memchr /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/memchr-2.3.4/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 --cfg 'feature="default"' --cfg 'feature="std"' -C metadata=fb1138a3a23e457f -C extra-filename=-fb1138a3a23e457f --out-dir /home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --cap-lints allow --cfg memchr_runtime_simd --cfg memchr_runtime_sse2 --cfg memchr_runtime_sse42 --cfg memchr_runtime_avx`
+2021-03-24T17:15:31.8780451Z [0m[0m[1m[32m     Running[0m `/home/runner/work/STUN/STUN/target/debug/build/tokio-1b3a30dacd0b9eb1/build-script-build`
+2021-03-24T17:15:32.2165843Z [0m[0m[1m[32m   Compiling[0m quote v1.0.9
+2021-03-24T17:15:32.2183823Z [0m[0m[1m[32m     Running[0m `rustc --crate-name quote --edition=2018 /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/quote-1.0.9/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 --cfg 'feature="default"' --cfg 'feature="proc-macro"' -C metadata=849401de171008b7 -C extra-filename=-849401de171008b7 --out-dir /home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --extern proc_macro2=/home/runner/work/STUN/STUN/target/debug/deps/libproc_macro2-4431be3eb037870a.rmeta --cap-lints allow`
+2021-03-24T17:15:32.5112402Z [0m[0m[1m[32m   Compiling[0m parking_lot_core v0.8.3
+2021-03-24T17:15:32.5117719Z [0m[0m[1m[32m     Running[0m `rustc --crate-name parking_lot_core --edition=2018 /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/parking_lot_core-0.8.3/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 -C metadata=fd172d6f3347a1c3 -C extra-filename=-fd172d6f3347a1c3 --out-dir /home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --extern cfg_if=/home/runner/work/STUN/STUN/target/debug/deps/libcfg_if-5027c5fda945db67.rmeta --extern instant=/home/runner/work/STUN/STUN/target/debug/deps/libinstant-a66b52fcbf3b13e3.rmeta --extern libc=/home/runner/work/STUN/STUN/target/debug/deps/liblibc-966c63ed43d1d2bd.rmeta --extern smallvec=/home/runner/work/STUN/STUN/target/debug/deps/libsmallvec-e310e2c157142037.rmeta --cap-lints allow`
+2021-03-24T17:15:32.9222495Z [0m[0m[1m[32m   Compiling[0m num_cpus v1.13.0
+2021-03-24T17:15:32.9227558Z [0m[0m[1m[32m     Running[0m `rustc --crate-name num_cpus /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/num_cpus-1.13.0/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 -C metadata=90945983d89cf349 -C extra-filename=-90945983d89cf349 --out-dir /home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --extern libc=/home/runner/work/STUN/STUN/target/debug/deps/liblibc-966c63ed43d1d2bd.rmeta --cap-lints allow`
+2021-03-24T17:15:33.1397275Z [0m[0m[1m[32m   Compiling[0m signal-hook-registry v1.3.0
+2021-03-24T17:15:33.1401270Z [0m[0m[1m[32m     Running[0m `rustc --crate-name signal_hook_registry /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/signal-hook-registry-1.3.0/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 -C metadata=9eba960a5cb31de8 -C extra-filename=-9eba960a5cb31de8 --out-dir /home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --extern libc=/home/runner/work/STUN/STUN/target/debug/deps/liblibc-966c63ed43d1d2bd.rmeta --cap-lints allow`
+2021-03-24T17:15:33.7366440Z [0m[0m[1m[32m   Compiling[0m mio v0.7.11
+2021-03-24T17:15:33.7373245Z [0m[0m[1m[32m     Running[0m `rustc --crate-name mio --edition=2018 /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/mio-0.7.11/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 --cfg 'feature="default"' --cfg 'feature="net"' --cfg 'feature="os-ext"' --cfg 'feature="os-poll"' --cfg 'feature="os-util"' --cfg 'feature="tcp"' --cfg 'feature="udp"' --cfg 'feature="uds"' -C metadata=22b88ca36865fadf -C extra-filename=-22b88ca36865fadf --out-dir /home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --extern libc=/home/runner/work/STUN/STUN/target/debug/deps/liblibc-966c63ed43d1d2bd.rmeta --extern log=/home/runner/work/STUN/STUN/target/debug/deps/liblog-5e7e7282d7290040.rmeta --cap-lints allow`
+2021-03-24T17:15:34.0846741Z [0m[0m[1m[32m     Running[0m `rustc --crate-name syn --edition=2018 /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/syn-1.0.64/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 --cfg 'feature="clone-impls"' --cfg 'feature="default"' --cfg 'feature="derive"' --cfg 'feature="full"' --cfg 'feature="parsing"' --cfg 'feature="printing"' --cfg 'feature="proc-macro"' --cfg 'feature="quote"' --cfg 'feature="visit-mut"' -C metadata=33be3360ad8d8ccf -C extra-filename=-33be3360ad8d8ccf --out-dir /home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --extern proc_macro2=/home/runner/work/STUN/STUN/target/debug/deps/libproc_macro2-4431be3eb037870a.rmeta --extern quote=/home/runner/work/STUN/STUN/target/debug/deps/libquote-849401de171008b7.rmeta --extern unicode_xid=/home/runner/work/STUN/STUN/target/debug/deps/libunicode_xid-373664510327a5cc.rmeta --cap-lints allow --cfg syn_disable_nightly_tests`
+2021-03-24T17:15:35.1149014Z [0m[0m[1m[32m   Compiling[0m parking_lot v0.11.1
+2021-03-24T17:15:35.1155175Z [0m[0m[1m[32m     Running[0m `rustc --crate-name parking_lot --edition=2018 /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/parking_lot-0.11.1/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 --cfg 'feature="default"' -C metadata=44847e2346f4226a -C extra-filename=-44847e2346f4226a --out-dir /home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --extern instant=/home/runner/work/STUN/STUN/target/debug/deps/libinstant-a66b52fcbf3b13e3.rmeta --extern lock_api=/home/runner/work/STUN/STUN/target/debug/deps/liblock_api-c5b0a39665108282.rmeta --extern parking_lot_core=/home/runner/work/STUN/STUN/target/debug/deps/libparking_lot_core-fd172d6f3347a1c3.rmeta --cap-lints allow`
+2021-03-24T17:15:41.4161903Z [0m[0m[1m[32m   Compiling[0m tokio-macros v1.1.0
+2021-03-24T17:15:41.4167696Z [0m[0m[1m[32m     Running[0m `rustc --crate-name tokio_macros --edition=2018 /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-macros-1.1.0/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi --crate-type proc-macro --emit=dep-info,link -C prefer-dynamic -C embed-bitcode=no -C debuginfo=2 -C metadata=1350af2afe24b1ef -C extra-filename=-1350af2afe24b1ef --out-dir /home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --extern proc_macro2=/home/runner/work/STUN/STUN/target/debug/deps/libproc_macro2-4431be3eb037870a.rlib --extern quote=/home/runner/work/STUN/STUN/target/debug/deps/libquote-849401de171008b7.rlib --extern syn=/home/runner/work/STUN/STUN/target/debug/deps/libsyn-33be3360ad8d8ccf.rlib --extern proc_macro --cap-lints allow`
+2021-03-24T17:15:41.4179327Z [0m[0m[1m[32m     Running[0m `rustc --crate-name async_trait --edition=2018 /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.48/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi --crate-type proc-macro --emit=dep-info,link -C prefer-dynamic -C embed-bitcode=no -C debuginfo=2 -C metadata=ae4a8340fb4f4a28 -C extra-filename=-ae4a8340fb4f4a28 --out-dir /home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --extern proc_macro2=/home/runner/work/STUN/STUN/target/debug/deps/libproc_macro2-4431be3eb037870a.rlib --extern quote=/home/runner/work/STUN/STUN/target/debug/deps/libquote-849401de171008b7.rlib --extern syn=/home/runner/work/STUN/STUN/target/debug/deps/libsyn-33be3360ad8d8ccf.rlib --extern proc_macro --cap-lints allow`
+2021-03-24T17:15:43.5136204Z [0m[0m[1m[32m     Running[0m `rustc --crate-name tokio --edition=2018 /home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-1.4.0/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 --cfg 'feature="bytes"' --cfg 'feature="default"' --cfg 'feature="fs"' --cfg 'feature="full"' --cfg 'feature="io-std"' --cfg 'feature="io-util"' --cfg 'feature="libc"' --cfg 'feature="macros"' --cfg 'feature="memchr"' --cfg 'feature="mio"' --cfg 'feature="net"' --cfg 'feature="num_cpus"' --cfg 'feature="once_cell"' --cfg 'feature="parking_lot"' --cfg 'feature="process"' --cfg 'feature="rt"' --cfg 'feature="rt-multi-thread"' --cfg 'feature="signal"' --cfg 'feature="signal-hook-registry"' --cfg 'feature="sync"' --cfg 'feature="time"' --cfg 'feature="tokio-macros"' --cfg 'feature="tracing"' --cfg 'feature="winapi"' -C metadata=f18d4bcbdcaa2beb -C extra-filename=-f18d4bcbdcaa2beb --out-dir /home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --extern bytes=/home/runner/work/STUN/STUN/target/debug/deps/libbytes-dbb60275a9c48d19.rmeta --extern libc=/home/runner/work/STUN/STUN/target/debug/deps/liblibc-966c63ed43d1d2bd.rmeta --extern memchr=/home/runner/work/STUN/STUN/target/debug/deps/libmemchr-fb1138a3a23e457f.rmeta --extern mio=/home/runner/work/STUN/STUN/target/debug/deps/libmio-22b88ca36865fadf.rmeta --extern num_cpus=/home/runner/work/STUN/STUN/target/debug/deps/libnum_cpus-90945983d89cf349.rmeta --extern once_cell=/home/runner/work/STUN/STUN/target/debug/deps/libonce_cell-5f95ba31ee256d5f.rmeta --extern parking_lot=/home/runner/work/STUN/STUN/target/debug/deps/libparking_lot-44847e2346f4226a.rmeta --extern pin_project_lite=/home/runner/work/STUN/STUN/target/debug/deps/libpin_project_lite-1090cf562b4a2ee8.rmeta --extern signal_hook_registry=/home/runner/work/STUN/STUN/target/debug/deps/libsignal_hook_registry-9eba960a5cb31de8.rmeta --extern tokio_macros=/home/runner/work/STUN/STUN/target/debug/deps/libtokio_macros-1350af2afe24b1ef.so --cap-lints allow --cfg tokio_track_caller`
+2021-03-24T17:15:48.7952865Z [0m[0m[1m[32m   Compiling[0m stun v0.1.0 (/home/runner/work/STUN/STUN)
+2021-03-24T17:15:48.7961571Z [0m[0m[1m[32m     Running[0m `rustc --crate-name stun --edition=2018 src/lib.rs --error-format=json --json=diagnostic-rendered-ansi --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 -C metadata=fa79e9a9cb6059a1 -C extra-filename=-fa79e9a9cb6059a1 --out-dir /home/runner/work/STUN/STUN/target/debug/deps -C incremental=/home/runner/work/STUN/STUN/target/debug/incremental -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --extern async_trait=/home/runner/work/STUN/STUN/target/debug/deps/libasync_trait-ae4a8340fb4f4a28.so --extern byteorder=/home/runner/work/STUN/STUN/target/debug/deps/libbyteorder-20af568bf8d71702.rmeta --extern tokio=/home/runner/work/STUN/STUN/target/debug/deps/libtokio-f18d4bcbdcaa2beb.rmeta`
+2021-03-24T17:15:49.6313703Z [0m[1m[33mwarning[0m[0m[1m: variable does not need to be mutable[0m
+2021-03-24T17:15:49.6314939Z [0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/stunserver.rs:91:28[0m
+2021-03-24T17:15:49.6315831Z [0m   [0m[0m[1m[38;5;12m|[0m
+2021-03-24T17:15:49.6316980Z [0m[1m[38;5;12m91[0m[0m [0m[0m[1m[38;5;12m| [0m[0m                        Ok(mut stream) => {[0m
+2021-03-24T17:15:49.6317779Z [0m   [0m[0m[1m[38;5;12m| [0m[0m                           [0m[0m[1m[38;5;12m----[0m[0m[1m[33m^^^^^^[0m
+2021-03-24T17:15:49.6318396Z [0m   [0m[0m[1m[38;5;12m| [0m[0m                           [0m[0m[1m[38;5;12m|[0m
+2021-03-24T17:15:49.6319051Z [0m   [0m[0m[1m[38;5;12m| [0m[0m                           [0m[0m[1m[38;5;12mhelp: remove this `mut`[0m
+2021-03-24T17:15:49.6319802Z [0m   [0m[0m[1m[38;5;12m|[0m
+2021-03-24T17:15:49.6320657Z [0m   [0m[0m[1m[38;5;12m= [0m[0m[1mnote[0m[0m: `#[warn(unused_mut)]` on by default[0m
+2021-03-24T17:15:49.6321182Z 
+2021-03-24T17:15:50.9199091Z [0m[1m[33mwarning[0m[0m[1m: 1 warning emitted[0m
+2021-03-24T17:15:50.9200495Z 
+2021-03-24T17:15:52.7305245Z [0m[0m[1m[32m     Running[0m `rustc --crate-name stun --edition=2018 src/main.rs --error-format=json --json=diagnostic-rendered-ansi --crate-type bin --emit=dep-info,link -C embed-bitcode=no -C debuginfo=2 -C metadata=87e55ce16f427565 -C extra-filename=-87e55ce16f427565 --out-dir /home/runner/work/STUN/STUN/target/debug/deps -C incremental=/home/runner/work/STUN/STUN/target/debug/incremental -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --extern async_trait=/home/runner/work/STUN/STUN/target/debug/deps/libasync_trait-ae4a8340fb4f4a28.so --extern byteorder=/home/runner/work/STUN/STUN/target/debug/deps/libbyteorder-20af568bf8d71702.rlib --extern stun=/home/runner/work/STUN/STUN/target/debug/deps/libstun-fa79e9a9cb6059a1.rlib --extern tokio=/home/runner/work/STUN/STUN/target/debug/deps/libtokio-f18d4bcbdcaa2beb.rlib`
+2021-03-24T17:15:53.8627754Z [0m[0m[1m[32m    Finished[0m dev [unoptimized + debuginfo] target(s) in 1m 34s
+2021-03-24T17:15:53.8825608Z ##[group]Run cargo test --verbose
+2021-03-24T17:15:53.8826104Z [36;1mcargo test --verbose[0m
+2021-03-24T17:15:53.8865487Z shell: /usr/bin/bash -e {0}
+2021-03-24T17:15:53.8865781Z env:
+2021-03-24T17:15:53.8866089Z   CARGO_TERM_COLOR: always
+2021-03-24T17:15:53.8866399Z ##[endgroup]
+2021-03-24T17:15:53.9980864Z [0m[0m[1m[32m       Fresh[0m cfg-if v1.0.0
+2021-03-24T17:15:53.9982457Z [0m[0m[1m[32m       Fresh[0m unicode-xid v0.2.1
+2021-03-24T17:15:53.9983789Z [0m[0m[1m[32m       Fresh[0m autocfg v1.0.1
+2021-03-24T17:15:53.9985004Z [0m[0m[1m[32m       Fresh[0m scopeguard v1.1.0
+2021-03-24T17:15:53.9985896Z [0m[0m[1m[32m       Fresh[0m smallvec v1.6.1
+2021-03-24T17:15:53.9986745Z [0m[0m[1m[32m       Fresh[0m bytes v1.0.1
+2021-03-24T17:15:53.9987665Z [0m[0m[1m[32m       Fresh[0m pin-project-lite v0.2.6
+2021-03-24T17:15:53.9988630Z [0m[0m[1m[32m       Fresh[0m once_cell v1.7.2
+2021-03-24T17:15:53.9989590Z [0m[0m[1m[32m       Fresh[0m byteorder v1.4.3
+2021-03-24T17:15:53.9991008Z [0m[0m[1m[32m       Fresh[0m instant v0.1.9
+2021-03-24T17:15:53.9991899Z [0m[0m[1m[32m       Fresh[0m lock_api v0.4.2
+2021-03-24T17:15:53.9992746Z [0m[0m[1m[32m       Fresh[0m libc v0.2.91
+2021-03-24T17:15:53.9994174Z [0m[0m[1m[32m       Fresh[0m proc-macro2 v1.0.24
+2021-03-24T17:15:53.9995042Z [0m[0m[1m[32m       Fresh[0m log v0.4.14
+2021-03-24T17:15:53.9995846Z [0m[0m[1m[32m       Fresh[0m memchr v2.3.4
+2021-03-24T17:15:53.9996715Z [0m[0m[1m[32m       Fresh[0m parking_lot_core v0.8.3
+2021-03-24T17:15:53.9997565Z [0m[0m[1m[32m       Fresh[0m num_cpus v1.13.0
+2021-03-24T17:15:53.9998698Z [0m[0m[1m[32m       Fresh[0m signal-hook-registry v1.3.0
+2021-03-24T17:15:54.0000743Z [0m[0m[1m[32m       Fresh[0m quote v1.0.9
+2021-03-24T17:15:54.0001772Z [0m[0m[1m[32m       Fresh[0m mio v0.7.11
+2021-03-24T17:15:54.0003576Z [0m[0m[1m[32m       Fresh[0m parking_lot v0.11.1
+2021-03-24T17:15:54.0005889Z [0m[0m[1m[32m       Fresh[0m syn v1.0.64
+2021-03-24T17:15:54.0006796Z [0m[0m[1m[32m       Fresh[0m tokio-macros v1.1.0
+2021-03-24T17:15:54.0008195Z [0m[0m[1m[32m       Fresh[0m async-trait v0.1.48
+2021-03-24T17:15:54.0009532Z [0m[0m[1m[32m       Fresh[0m tokio v1.4.0
+2021-03-24T17:15:54.0010811Z [0m[1m[33mwarning[0m[0m[1m: variable does not need to be mutable[0m
+2021-03-24T17:15:54.0012051Z [0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/stunserver.rs:91:28[0m
+2021-03-24T17:15:54.0013189Z [0m   [0m[0m[1m[38;5;12m|[0m
+2021-03-24T17:15:54.0014352Z [0m[1m[38;5;12m91[0m[0m [0m[0m[1m[38;5;12m| [0m[0m                        Ok(mut stream) => {[0m
+2021-03-24T17:15:54.0015210Z [0m   [0m[0m[1m[38;5;12m| [0m[0m                           [0m[0m[1m[38;5;12m----[0m[0m[1m[33m^^^^^^[0m
+2021-03-24T17:15:54.0016034Z [0m   [0m[0m[1m[38;5;12m| [0m[0m                           [0m[0m[1m[38;5;12m|[0m
+2021-03-24T17:15:54.0016891Z [0m   [0m[0m[1m[38;5;12m| [0m[0m                           [0m[0m[1m[38;5;12mhelp: remove this `mut`[0m
+2021-03-24T17:15:54.0017662Z [0m   [0m[0m[1m[38;5;12m|[0m
+2021-03-24T17:15:54.0018465Z [0m   [0m[0m[1m[38;5;12m= [0m[0m[1mnote[0m[0m: `#[warn(unused_mut)]` on by default[0m
+2021-03-24T17:15:54.0018957Z 
+2021-03-24T17:15:54.0019648Z [0m[1m[33mwarning[0m[0m[1m: 1 warning emitted[0m
+2021-03-24T17:15:54.0020092Z 
+2021-03-24T17:15:54.0020844Z [0m[0m[1m[32m   Compiling[0m stun v0.1.0 (/home/runner/work/STUN/STUN)
+2021-03-24T17:15:54.0025123Z [0m[0m[1m[32m     Running[0m `rustc --crate-name stun --edition=2018 src/lib.rs --error-format=json --json=diagnostic-rendered-ansi --emit=dep-info,link -C embed-bitcode=no -C debuginfo=2 --test -C metadata=b9d63cb458636a1d -C extra-filename=-b9d63cb458636a1d --out-dir /home/runner/work/STUN/STUN/target/debug/deps -C incremental=/home/runner/work/STUN/STUN/target/debug/incremental -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --extern async_trait=/home/runner/work/STUN/STUN/target/debug/deps/libasync_trait-ae4a8340fb4f4a28.so --extern byteorder=/home/runner/work/STUN/STUN/target/debug/deps/libbyteorder-20af568bf8d71702.rlib --extern tokio=/home/runner/work/STUN/STUN/target/debug/deps/libtokio-f18d4bcbdcaa2beb.rlib`
+2021-03-24T17:15:54.0035383Z [0m[0m[1m[32m     Running[0m `rustc --crate-name stun --edition=2018 src/main.rs --error-format=json --json=diagnostic-rendered-ansi --emit=dep-info,link -C embed-bitcode=no -C debuginfo=2 --test -C metadata=5a3d7d634a196a6b -C extra-filename=-5a3d7d634a196a6b --out-dir /home/runner/work/STUN/STUN/target/debug/deps -C incremental=/home/runner/work/STUN/STUN/target/debug/incremental -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --extern async_trait=/home/runner/work/STUN/STUN/target/debug/deps/libasync_trait-ae4a8340fb4f4a28.so --extern byteorder=/home/runner/work/STUN/STUN/target/debug/deps/libbyteorder-20af568bf8d71702.rlib --extern stun=/home/runner/work/STUN/STUN/target/debug/deps/libstun-fa79e9a9cb6059a1.rlib --extern tokio=/home/runner/work/STUN/STUN/target/debug/deps/libtokio-f18d4bcbdcaa2beb.rlib`
+2021-03-24T17:15:54.7371610Z [0m[1m[33mwarning[0m[0m[1m: variable does not need to be mutable[0m
+2021-03-24T17:15:54.7372682Z [0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/stunserver.rs:91:28[0m
+2021-03-24T17:15:54.7373728Z [0m   [0m[0m[1m[38;5;12m|[0m
+2021-03-24T17:15:54.7374426Z [0m[1m[38;5;12m91[0m[0m [0m[0m[1m[38;5;12m| [0m[0m                        Ok(mut stream) => {[0m
+2021-03-24T17:15:54.7375200Z [0m   [0m[0m[1m[38;5;12m| [0m[0m                           [0m[0m[1m[38;5;12m----[0m[0m[1m[33m^^^^^^[0m
+2021-03-24T17:15:54.7375904Z [0m   [0m[0m[1m[38;5;12m| [0m[0m                           [0m[0m[1m[38;5;12m|[0m
+2021-03-24T17:15:54.7376928Z [0m   [0m[0m[1m[38;5;12m| [0m[0m                           [0m[0m[1m[38;5;12mhelp: remove this `mut`[0m
+2021-03-24T17:15:54.7377575Z [0m   [0m[0m[1m[38;5;12m|[0m
+2021-03-24T17:15:54.7378287Z [0m   [0m[0m[1m[38;5;12m= [0m[0m[1mnote[0m[0m: `#[warn(unused_mut)]` on by default[0m
+2021-03-24T17:15:54.7378698Z 
+2021-03-24T17:15:55.3381771Z [0m[1m[33mwarning[0m[0m[1m: 1 warning emitted[0m
+2021-03-24T17:15:55.3391595Z 
+2021-03-24T17:15:55.3434199Z [0m[0m[1m[32m    Finished[0m test [unoptimized + debuginfo] target(s) in 1.37s
+2021-03-24T17:15:55.3448111Z [0m[0m[1m[32m     Running[0m `/home/runner/work/STUN/STUN/target/debug/deps/stun-b9d63cb458636a1d`
+2021-03-24T17:15:55.3459972Z 
+2021-03-24T17:15:55.3460714Z running 5 tests
+2021-03-24T17:15:55.3463823Z test attributes::tests::test_xor_encoding_v4 ... ok
+2021-03-24T17:15:55.3464715Z test handlers::tests::test ... ok
+2021-03-24T17:15:55.3465466Z test message::tests::test ... ok
+2021-03-24T17:15:55.3466410Z test errors::tests::test ... ok
+2021-03-24T17:15:55.3468490Z test stunserver::tests::test ... ok
+2021-03-24T17:15:55.3468765Z 
+2021-03-24T17:15:55.3469198Z test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2021-03-24T17:15:55.3469963Z 
+2021-03-24T17:15:55.3474853Z [0m[0m[1m[32m     Running[0m `/home/runner/work/STUN/STUN/target/debug/deps/stun-5a3d7d634a196a6b`
+2021-03-24T17:15:55.3484401Z 
+2021-03-24T17:15:55.3484895Z running 0 tests
+2021-03-24T17:15:55.3485217Z 
+2021-03-24T17:15:55.3485817Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2021-03-24T17:15:55.3486307Z 
+2021-03-24T17:15:55.3487142Z [0m[0m[1m[32m   Doc-tests[0m stun
+2021-03-24T17:15:55.3490950Z [0m[0m[1m[32m     Running[0m `rustdoc --edition=2018 --crate-type lib --test /home/runner/work/STUN/STUN/src/lib.rs --crate-name stun -L dependency=/home/runner/work/STUN/STUN/target/debug/deps -L dependency=/home/runner/work/STUN/STUN/target/debug/deps --extern async_trait=/home/runner/work/STUN/STUN/target/debug/deps/libasync_trait-ae4a8340fb4f4a28.so --extern byteorder=/home/runner/work/STUN/STUN/target/debug/deps/libbyteorder-20af568bf8d71702.rlib --extern stun=/home/runner/work/STUN/STUN/target/debug/deps/libstun-fa79e9a9cb6059a1.rlib --extern tokio=/home/runner/work/STUN/STUN/target/debug/deps/libtokio-f18d4bcbdcaa2beb.rlib -C embed-bitcode=no`
+2021-03-24T17:15:56.0450726Z 
+2021-03-24T17:15:56.0451917Z running 0 tests
+2021-03-24T17:15:56.0452362Z 
+2021-03-24T17:15:56.0453110Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2021-03-24T17:15:56.0453892Z 
+2021-03-24T17:15:56.0568473Z Post job cleanup.
+2021-03-24T17:15:56.1546448Z [command]/usr/bin/git version
+2021-03-24T17:15:56.1603674Z git version 2.31.0
+2021-03-24T17:15:56.1641671Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2021-03-24T17:15:56.1675165Z [command]/usr/bin/git submodule foreach --recursive git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :
+2021-03-24T17:15:56.1902487Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2021-03-24T17:15:56.1931231Z http.https://github.com/.extraheader
+2021-03-24T17:15:56.1944084Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2021-03-24T17:15:56.1971106Z [command]/usr/bin/git submodule foreach --recursive git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :
+2021-03-24T17:15:56.2236803Z Cleaning up orphan processes

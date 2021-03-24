@@ -8,12 +8,12 @@ spec:
   rules:
     - http:
         paths:
-          - path: /webrtc/
+          - path: /?(.*)
             pathType: ImplementationSpecific
             backend:
               serviceName: frontend
               servicePort: 80
-          - path: /?(.*)
+          - path: /api/?(.*)
             pathType: ImplementationSpecific
             backend:
               serviceName: signalserver
