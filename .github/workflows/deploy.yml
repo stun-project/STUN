@@ -63,5 +63,5 @@ jobs:
         
     - name: Start new server
       run: |-
-        docker-compose up -d -e HOST=${{ secrets.NTNU_SEVER_LOCAL_IP }} PORT=${{ secrets.STUN_PORT }}
+        ADDRESS=${{ secrets.NTNU_SEVER_LOCAL_IP }} PORT=${{ secrets.STUN_PORT }} docker-compose up -d
   
