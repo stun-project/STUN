@@ -3,7 +3,6 @@ extern crate tokio;
 use std::env;
 use std::error::Error;
 use stun::stunserver::{parse_program_arguments, StunServerBuilder};
-//use stunserver::{parse_program_arguments, StunServerBuilder};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {

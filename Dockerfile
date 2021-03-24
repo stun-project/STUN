@@ -15,7 +15,3 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get -y install ca-certificates libssl-dev && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /build-out/stun /
-
-EXPOSE 3478
-
-CMD /stun 0.0.0.0

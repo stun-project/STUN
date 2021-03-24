@@ -1,0 +1,10 @@
+version: "3.4"
+services:
+  stun:
+    network_mode: host
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      network: host
+    image: "sigmundgranaas/stun:${TAG}"
+    command: "./stun ${ADDRESS} ${PORT} ${MODE}"
