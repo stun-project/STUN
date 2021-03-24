@@ -9,6 +9,7 @@ STUN server written in rust, it uses the tokio for a asynchronous runtime. It is
 - Error-reply in certain cases
 - Correct unauthenticated binding request handling
 - TCP and UDP support
+- IPv4 and IPv6 support
 - Dynamic configuration of listening port, address and protocol from CLI
 
 ## Future work
@@ -87,4 +88,4 @@ Latest run CI test: view [latest_log.txt](./latest_log.txt)
 
 We have also set up automatic deployments for all pushes to the master branch ensuring the latest version of our STUN server is availible at all time. To view the automatic deployment pipeline, check out the build.yml file it `.github/workflows/deploy.yml`
 
-The stun server SHOULD curently be availible at `stun:sandring.no:6000`
+The stun server SHOULD curently be available at `stun:sandring.no:6000`
