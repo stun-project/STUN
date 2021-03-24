@@ -59,7 +59,7 @@ jobs:
           
     - name: SSH to new server
       run: |-
-        ssh ${{ NTNU_SERVER_USER }}:${{ DOMAIN }}
+        ssh ${{ secrets.NTNU_SERVER_USER }}:${{ secrets.DOMAIN }}
         
     - name: Stop old server
       run: |-
