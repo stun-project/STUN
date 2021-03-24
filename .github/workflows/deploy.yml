@@ -46,7 +46,7 @@ jobs:
 
 
     # Deploy the stun server to the CD server
-    - name: Deploy
+    - name: Copy files
       uses: easingthemes/ssh-deploy@v2.1.5
       env:
           SSH_PRIVATE_KEY: ${{ secrets.NTNU_SERVER_PRIVATE_KEY }}
@@ -56,8 +56,15 @@ jobs:
           REMOTE_USER: ${{ secrets.NTNU_SERVER_USER }}
           TARGET: ${{ secrets.REMOTE_TARGET }}
           EXCLUDE: "/target/, /src/"
-          
-    - name: SSH to new server
-      run: |-
-        ssh -i ${{ secrets.secrets.NTNU_SERVER_PRIVATE_KEY }} -tt ${{ secrets.NTNU_SERVER_USER }}@${{ secrets.DOMAIN }}  /bin/bash &&  ADDRESS=${{ secrets.NTNU_SEVER_LOCAL_IP }} PORT=${{ secrets.STUN_PORT }} docker-compose up -d
+    
+    - name: Run the STUN server
+      uses: fifsky/ssh-action@master
+      with:
+        command: |
+          docker-compose down
+          ADDRESS=${{ secrets.NTNU_SEVER_LOCAL_IP }} PORT=${{ secrets.STUN_PORT }} docker-compose up -d
+        host: ${{ secrets.DOMAIN }}
+        user: ${{ secrets.NTNU_SERVER_USER }}
+        key: ${{ secrets.secrets.NTNU_SERVER_PRIVATE_KEY }}
+        args: "-tt"
   
