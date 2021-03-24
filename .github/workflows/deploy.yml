@@ -64,7 +64,7 @@ jobs:
           cd STUN
           docker-compose down
           docker-compose pull
-          ADDRESS=${{ secrets.NTNU_SEVER_LOCAL_IP }} PORT=${{ secrets.STUN_PORT }} docker-compose up
+          ADDRESS=${{ secrets.NTNU_SEVRER_LOCAL_IP }} PORT=${{ secrets.STUN_PORT }} docker-compose up -d
         host: ${{ secrets.DOMAIN }}
         user: ${{ secrets.NTNU_SERVER_USER }}
         key: ${{ secrets.NTNU_SERVER_PRIVATE_KEY }}
