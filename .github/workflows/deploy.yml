@@ -30,7 +30,7 @@ jobs:
       uses: docker/login-action@v1
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_SECRET
+        password: ${{ secrets.DOCKERHUB_SECRET }}
 
     # Build the Docker image
     - name: Build
