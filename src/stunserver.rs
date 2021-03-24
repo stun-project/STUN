@@ -1,10 +1,10 @@
 extern crate tokio;
-use crate::handlers::{check_validity, handle_message};
+use crate::handlers::handle_message;
 use async_trait::async_trait;
 use std::error::Error;
 use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 use std::str::FromStr;
-use tokio::io::AsyncReadExt;
+use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::{TcpListener, TcpStream, UdpSocket};
 
 #[async_trait]
@@ -54,12 +54,8 @@ impl StunServer for UdpStunServer {
                 udp_message = self.udp_socket.recv_from(&mut buffer) => {
                     match udp_message {
                         Ok(message) => {
-                            tokio::spawn(async move {
-                                println!("Accepted connection from {}, received {} bytes", &message.1, &message.0);
-                                if let Err(e) = handle_udp_connection(&buffer, message.0).await {
-                                    println!("an error occurred; error = {:?}", e);
-                                }
-                            });
+                            let response = handle_udp_connection(&mut buffer, message.0, message.1 ).await?;
+                            self.udp_socket.send(&response).await?;
                         },
                         Err(e) => println!("{:?}", e),
                     }
@@ -84,19 +80,15 @@ impl StunServer for MultiplexedStunServer {
                 udp_message = self.udp_socket.recv_from(&mut buffer) => {
                     match udp_message {
                         Ok(message) => {
-                            tokio::spawn(async move {
-                                println!("Accepted connection from {}, received {} bytes", &message.1, &message.0);
-                                if let Err(e) = handle_udp_connection(&buffer, message.0).await {
-                                    println!("an error occurred; error = {:?}", e);
-                                }
-                            });
+                            let response = handle_udp_connection(&mut buffer, message.0, message.1 ).await?;
+                            self.udp_socket.send_to(&response, message.1).await?;
                         },
                         Err(e) => println!("{:?}", e),
                     }
-                }
+                },
                 tcp_stream = self.tcp_socket.accept() => {
                     match tcp_stream {
-                        Ok(stream) => {
+                        Ok(mut stream) => {
                             tokio::spawn(async move {
                                 println!("Accepted connection from {}", &stream.1);
                                 if let Err(e) = handle_tcp_connection(stream.0).await {
@@ -182,16 +174,35 @@ async fn handle_tcp_connection(mut stream: TcpStream) -> Result<(), Box<dyn Erro
     stream.readable().await?;
     let length = stream.read(&mut buffer).await?;
     println!("{}", String::from_utf8_lossy(&buffer[..length]));
+
+    let message = handle_message(&buffer, stream.peer_addr().unwrap());
+
+    let serialized_stun_message = message.serialize();
+
+    stream.writable().await?;
+    stream.write_all(&serialized_stun_message).await?;
+
+    // match stream.peer_addr() {
+    //     Ok(socket_addr) => {
+    //          //skal det være: ?
+    //         stream.flush().await?;
+    //     }
+    //     Err(e) => panic!(e),
+    // };
+
     Ok(())
 }
 
 async fn handle_udp_connection(
     buffer: &[u8; 1024],
     message_len: usize,
-) -> Result<(), Box<dyn Error>> {
-    println!("{:?}", &buffer[..message_len]);
-    //handle_header(&buffer[..message_len]);
-    Ok(())
+    address: SocketAddr,
+) -> Result<Vec<u8>, Box<dyn Error>> {
+    println!("Request: {:?}", &buffer[..message_len]);
+    let message = handle_message(&buffer[..message_len], address); //parse address, ta imot address
+    let response = message.serialize();
+    println!("Response: {:?}", &response);
+    Ok(response)
 }
 
 pub fn parse_program_arguments(input: Vec<String>) -> (SocketAddr, StunServerEnum) {
@@ -275,5 +286,13 @@ pub fn parse_program_arguments(input: Vec<String>) -> (SocketAddr, StunServerEnu
                 StunServerEnum::MultiplexedStunServer,
             );
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn test() {
+        assert_eq!(1, 1);
     }
 }
