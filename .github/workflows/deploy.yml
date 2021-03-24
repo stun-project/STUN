@@ -65,6 +65,6 @@ jobs:
           ADDRESS=${{ secrets.NTNU_SEVER_LOCAL_IP }} PORT=${{ secrets.STUN_PORT }} docker-compose up -d
         host: ${{ secrets.DOMAIN }}
         user: ${{ secrets.NTNU_SERVER_USER }}
-        key: ${{ secrets.secrets.NTNU_SERVER_PRIVATE_KEY_SSH }}
+        key: ${{ secrets.NTNU_SERVER_PRIVATE_KEY }}
         args: "-tt"
   
