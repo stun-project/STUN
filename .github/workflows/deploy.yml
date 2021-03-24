@@ -59,13 +59,5 @@ jobs:
           
     - name: SSH to new server
       run: |-
-        ssh ${{ secrets.NTNU_SERVER_USER }}:${{ secrets.DOMAIN }}
-        
-    - name: Stop old server
-      run: |-
-        docker-compose down
-        
-    - name: Start new server
-      run: |-
-        ADDRESS=${{ secrets.NTNU_SEVER_LOCAL_IP }} PORT=${{ secrets.STUN_PORT }} docker-compose up -d
+        ssh -tt ${{ secrets.NTNU_SERVER_USER }}@${{ secrets.DOMAIN }} /bin/bash &&  ADDRESS=${{ secrets.NTNU_SEVER_LOCAL_IP }} PORT=${{ secrets.STUN_PORT }} docker-compose up -d
   
