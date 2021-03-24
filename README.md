@@ -82,3 +82,9 @@ test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 ```
 
 Latest run CI test: view [latest_log.txt](./latest_log.txt)
+
+## Deployments
+
+We have also set up automatic deployments for all pushes to the master branch ensuring the latest version of our STUN server is availible at all time. To view the automatic deployment pipeline, check out the build.yml file it `.github/workflows/deploy.yml`
+
+The stun server SHOULD curently be availible at `stun:sandring.no:6000`
