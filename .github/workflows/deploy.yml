@@ -61,6 +61,7 @@ jobs:
       uses: fifsky/ssh-action@master
       with:
         command: |
+          cd STUN
           docker-compose down
           ADDRESS=${{ secrets.NTNU_SEVER_LOCAL_IP }} PORT=${{ secrets.STUN_PORT }} docker-compose up -d
         host: ${{ secrets.DOMAIN }}
