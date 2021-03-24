@@ -11,7 +11,7 @@ use tokio::net::{TcpListener, TcpStream, UdpSocket};
 pub trait StunServer {
     async fn run(&self) -> Result<(), Box<dyn Error>>;
 }
-
+#[derive(Debug)]
 struct TcpStunServer {
     _server_address: SocketAddr,
     tcp_socket: TcpListener,
@@ -39,7 +39,7 @@ impl StunServer for TcpStunServer {
         }
     }
 }
-
+#[derive(Debug)]
 struct UdpStunServer {
     _server_address: SocketAddr,
     udp_socket: UdpSocket,
@@ -64,7 +64,7 @@ impl StunServer for UdpStunServer {
         }
     }
 }
-
+#[derive(Debug)]
 struct MultiplexedStunServer {
     _server_address: SocketAddr,
     udp_socket: UdpSocket,
@@ -103,7 +103,7 @@ impl StunServer for MultiplexedStunServer {
         }
     }
 }
-
+#[derive(Debug)]
 pub enum StunServerEnum {
     TcpStunServer,
     UdpStunServer,
@@ -181,14 +181,6 @@ async fn handle_tcp_connection(mut stream: TcpStream) -> Result<(), Box<dyn Erro
 
     stream.writable().await?;
     stream.write_all(&serialized_stun_message).await?;
-
-    // match stream.peer_addr() {
-    //     Ok(socket_addr) => {
-    //          //skal det være: ?
-    //         stream.flush().await?;
-    //     }
-    //     Err(e) => panic!(e),
-    // };
 
     Ok(())
 }
@@ -291,8 +283,57 @@ pub fn parse_program_arguments(input: Vec<String>) -> (SocketAddr, StunServerEnu
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+
+    const stun_message: [u8; 20] = [
+        0, 1, 0, 0, 33, 18, 164, 66, 28, 54, 51, 69, 185, 194, 210, 171, 179, 118, 57, 253,
+    ];
+
+    const stun_message_success_response: [u8; 44] = [
+        1, 1, 0, 24, 33, 18, 164, 66, 28, 54, 51, 69, 185, 194, 210, 171, 179, 118, 57, 253, 0, 32,
+        0, 8, 0, 1, 58, 43, 94, 18, 164, 67, 0, 1, 0, 8, 0, 1, 27, 57, 127, 0, 0, 1,
+    ];
+
     #[test]
-    fn test() {
-        assert_eq!(1, 1);
+    fn test_address_inputs() {
+        let parsed = parse_program_arguments(vec!["".to_owned(), "123.123.123.123".to_owned()]);
+        let proper = (
+            SocketAddr::new(IpAddr::V4(Ipv4Addr::new(123, 123, 123, 123)), 3478),
+            StunServerEnum::MultiplexedStunServer,
+        );
+        assert_eq!(parsed.0, proper.0);
+    }
+
+    #[test]
+    fn test_port_inputs() {
+        let parsed = parse_program_arguments(vec![
+            "".to_owned(),
+            "123.123.123.123".to_owned(),
+            "6000".to_owned(),
+        ]);
+        let proper = (
+            SocketAddr::new(IpAddr::V4(Ipv4Addr::new(123, 123, 123, 123)), 6000),
+            StunServerEnum::MultiplexedStunServer,
+        );
+        assert_eq!(parsed.0, proper.0);
+    }
+
+    #[tokio::test]
+    async fn test_udp_message_handling() {
+        // buffer.write_all(stun_message_success_response);
+
+        let mut buffer = [0 as u8; 1024];
+        for i in 0..20 {
+            buffer[i] = stun_message[i];
+        }
+
+        let address: SocketAddr = "127.0.0.1:6969".parse().unwrap();
+
+        let handled_request = handle_udp_connection(&buffer, buffer.len(), address);
+
+        assert_eq!(
+            handled_request.await.unwrap(),
+            stun_message_success_response
+        );
     }
 }
