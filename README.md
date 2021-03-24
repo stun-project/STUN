@@ -9,6 +9,7 @@ STUN server written in rust, it uses the tokio for a asynchronous runtime. It is
 - Error-reply in certain cases
 - Correct unauthenticated binding request handling
 - TCP and UDP support
+- IPv4 and IPv6 support
 - Dynamic configuration of listening port, address and protocol from CLI
 
 ## Future work
