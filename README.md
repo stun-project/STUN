@@ -28,8 +28,9 @@ STUN server written in rust, it uses the tokio library to obtain a asynchronous 
 SKRIV HER SIGMUND
 
 ## Testing
-SKRIV HER SIGMUND
-
+SKRIV HER SIGMUND  
+Latest CI/CD job:  
+---
 
 ## Todo
 
