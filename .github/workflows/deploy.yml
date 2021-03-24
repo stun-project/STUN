@@ -1,0 +1,60 @@
+name: Build and deploy to production server
+
+on:
+  push:
+    branches:
+        - main 
+jobs:
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      
+    - name: Login to Docker HUB
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_SECRET }}
+
+    # Build the Docker image
+    - name: Build
+      run: |-
+        docker build \
+          --tag "sigmundgranaas/stun" \
+          .
+
+    # Push the Docker image to Google Container Registry
+    - name: Publish
+      run: |-
+        docker push "sigmundgranaas/stun" 
+
+
+    # Deploy the stun server to the CD server
+    - name: Copy files
+      uses: easingthemes/ssh-deploy@v2.1.5
+      env:
+          SSH_PRIVATE_KEY: ${{ secrets.NTNU_SERVER_PRIVATE_KEY }}
+          ARGS: "--delete"
+          SOURCE: "."
+          REMOTE_HOST: ${{ secrets.DOMAIN }}
+          REMOTE_USER: ${{ secrets.NTNU_SERVER_USER }}
+          TARGET: ${{ secrets.REMOTE_TARGET }}
+          EXCLUDE: "/target/, /src/"
+    
+    - name: Run the STUN server
+      uses: fifsky/ssh-action@master
+      with:
+        command: |
+          cd STUN
+          docker-compose down
+          docker-compose pull
+          ADDRESS=${{ secrets.NTNU_SERVER_LOCAL_IP }} PORT=${{ secrets.STUN_PORT }} docker-compose up -d
+        host: ${{ secrets.DOMAIN }}
+        user: ${{ secrets.NTNU_SERVER_USER }}
+        key: ${{ secrets.NTNU_SERVER_PRIVATE_KEY }}
+        args: "-tt"
+  
