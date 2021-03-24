@@ -68,6 +68,9 @@ pub fn handle_message(stun_message: &[u8], address: SocketAddr) -> StunMessage {
 
 //TODO - check length []
 pub fn check_validity(stun_message: &[u8]) -> bool {
+    if stun_message.len() < 20 {
+        return false;
+    }
     if stun_message[0] >= 64 {
         return false;
     }
