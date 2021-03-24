@@ -57,6 +57,10 @@ jobs:
           TARGET: ${{ secrets.REMOTE_TARGET }}
           EXCLUDE: "/target/, /src/"
           
+    - name: SSH to new server
+      run: |-
+        ssh ${{ NTNU_SERVER_USER }}:${{ DOMAIN }}
+        
     - name: Stop old server
       run: |-
         docker-compose down
